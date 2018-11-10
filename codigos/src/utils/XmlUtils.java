@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,22 +17,16 @@ import javax.xml.transform.stream.StreamResult;
 /**
  * Classe para leitura e escrita num arquivo XML.
  *
- * @param <T> Classe de modelo utilizada na leitura e escrita, quando necessario.
  */
-public class XmlUtils<T> {
-
-
-	public void lerXml(String path) {}
-	public void escreverXml(String path, Document document) {}
-	
-	
+public class XmlUtils {
+		
 	/**
 	 * Salva o documento XML no endereco.
 	 * @param documento - Document, XML a ser salvo.
 	 * @param endereco - String, endereco relativo ou completo do arquivo XML, incluindo '.xml'.
 	 * @throws Exception Excecoes diversas de leitura de arquivo.
 	 */
-	private void salvarXml(Document documento, String endereco) throws Exception {
+	private static void salvarXml(Document documento, String endereco) throws Exception {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource domSource = new DOMSource(documento);
@@ -49,15 +44,14 @@ public class XmlUtils<T> {
 	 * @return Document, arquivo XML.
 	 * @throws Exception Excecoes diversas de leitura de arquivo.
 	 */
-	private Document readXml(String endereco, String raiz) throws Exception {
+	public static Document lerXml(String endereco, String raiz) throws Exception {
 		File file = new File(endereco);
-		
 		
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		Document documento;
 		
-		// Se criou um arquivo que não existia, adiciona um no raiz e salva.
+		// Se criou um arquivo que nao existia, adiciona um no raiz e salva.
 		if (file.createNewFile()) {
 			documento = documentBuilder.newDocument();
 			
@@ -72,4 +66,33 @@ public class XmlUtils<T> {
 		return documento;
 	}
 
+	
+	/**
+	 * Retorna o valor do atributo associado ao primeiro no encontrado da tag.
+	 * @param documento - Document, XML qualquer.
+	 * @param tag - String, tag que eh o nome de um no.
+	 * @param atributo - String, nome do atributo a ser pesquisado na tag.
+	 * @return String, valor do atributo.
+	 */
+	public static String getValorAtributo(Document documento, String tag, String atributo) {
+		NodeList listaNos = documento.getElementsByTagName(tag);
+		if (listaNos.getLength() > 0) {
+			return listaNos.item(0).getAttributes().getNamedItem(atributo).getNodeValue();
+		} else {
+			return "";
+		}
+		
+	}
+
+
+	/**
+	 * Retorna a quantidade de nos de uma determinada tag presentes no documento.
+	 * @param documento - Document, XML qualquer.
+	 * @param tag - String, tag que eh o nome de um no.
+	 * @return int, quantidade de nos da tag.
+	 */
+	public static int getQuantidadeNos(Document documento, String tag) {
+		return documento.getElementsByTagName(tag).getLength();
+	}
+	
 }
