@@ -10,4 +10,6 @@ public class Periodico {
 	
 	private QualisEnum qualis;
 
+	public String nome;
+
 }
