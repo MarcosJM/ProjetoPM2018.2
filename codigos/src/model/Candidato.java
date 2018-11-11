@@ -30,18 +30,22 @@ public class Candidato {
 		return XmlUtils.getQuantidadeNos(lattes, "PREMIO-TITULO");
 	}
 	
-		
-	private ArrayList<Periodico> periodicos = new ArrayList<Periodico>();
+	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>();
 	
 	private ArrayList<Conferencia> conferencias = new ArrayList<Conferencia>();
-	
-	
+
+	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
+
+	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
+
+	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
 	
 	public void getPeriodicos() {
 		
 		
 	}
 
-	
-	
+	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
+	private float pontuacao = 0;
+
 }
