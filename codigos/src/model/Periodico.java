@@ -2,14 +2,17 @@ package model;
 
 public class Periodico {
 	
+	public String nome;
 	private String issn;
 	
-	private String titulo;
+	public Periodico(String issn, String nome) {
+		this.nome = nome;
+		this.issn = issn;
+	}
 	
-	private String AreaConhecimento;
-	
+	// Obtido atraves de consulta ao site Qualis ou de outra forma:
 	private QualisEnum qualis;
 
-	public String nome;
+	
 
 }

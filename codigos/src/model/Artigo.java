@@ -1,11 +1,19 @@
 package model;
 
-import java.util.Date;
-
 public class Artigo {
 	
-    private Periodico periodico;
+	private Periodico periodico;
     
-    private Date dataPublicacao;
+    private int anoPublicacao;
+    
+    private String titulo;
+	
+    public Artigo(String titulo, Periodico periodico, int anoPublicacao) {
+    	this.titulo = titulo;
+		this.periodico = periodico;
+		this.anoPublicacao = anoPublicacao;
+	}
+
+	
 
 }

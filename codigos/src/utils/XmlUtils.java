@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -83,6 +84,17 @@ public class XmlUtils {
 		}
 		
 	}
+	
+	
+	/**
+	 * Retorna o valor do atributo associado a um no.
+	 * @param no - Node, no onde se pesquisa o atributo.
+	 * @param atributo - String, nome do atributo a ser pesquisado.
+	 * @return String, valor do atributo.
+	 */
+	public static String getValorAtributo(Node no, String atributo) {
+		return no.getAttributes().getNamedItem(atributo).getNodeValue();	
+	}
 
 
 	/**
@@ -93,6 +105,17 @@ public class XmlUtils {
 	 */
 	public static int getQuantidadeNos(Document documento, String tag) {
 		return documento.getElementsByTagName(tag).getLength();
+	}
+
+
+	/**
+	 * Retorna os nos de uma determinada tag presentes no documento.
+	 * @param documento - Document, XML qualquer.
+	 * @param tag - String, tag que eh o nome de um no.
+	 * @return NodeList, lista de nos.
+	 */
+	public static NodeList getNos(Document documento, String tag) {
+		return documento.getElementsByTagName(tag);
 	}
 	
 }
