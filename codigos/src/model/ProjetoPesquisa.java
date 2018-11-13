@@ -5,12 +5,15 @@ import java.util.Date;
 
 public class ProjetoPesquisa {
 	
-    private Date dataVinculo;
+    public ProjetoPesquisa(int anoVinculo, String titulo, String coordenadorProjeto) {
+		this.anoVinculo = anoVinculo;
+		this.titulo = titulo;
+		this.coordenadorProjeto = coordenadorProjeto;
+	}
+
+	private int anoVinculo;
     
     private String titulo;
-
-    // Corresponde a todos os integrantes do projeto
-    private ArrayList<String> integrantes = new ArrayList<String>();
 
     // Extraido a partir dos integrantes
     private String coordenadorProjeto;

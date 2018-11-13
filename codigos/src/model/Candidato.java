@@ -99,11 +99,44 @@ public class Candidato {
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DE-OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS"));
 	}
 	
-	private void setProjetosPesquisa() {}
 	
-	private void setFormacoesAcademicas() {}
+	
+	private void setProjetosPesquisa() {
+		
+		NodeList nos = XmlUtils.getNos(lattes, "PROJETO-DE-PESQUISA");
+		for (int contador = 0; contador < nos.getLength(); contador++) {
+			Node no = nos.item(contador);
 
-	private void setAtuacoesProfissionais() {}
+			String anoVinculo = XmlUtils.getValorAtributo(no, "ANO-INICIO");
+			String titulo = XmlUtils.getValorAtributo(no, "NOME-DO-PROJETO");
+			String coordenadorProjeto = "";
+			
+			NodeList integrantes = no.getFirstChild().getChildNodes(); // EQUIPE-DO-PROJETO -> INTEGRANTES-DO-PROJETO
+			for (int contador2 = 0; contador2 < integrantes.getLength(); contador2++) {
+				Node integrante = integrantes.item(contador2);
+				String nome = XmlUtils.getValorAtributo(integrante, "NOME-COMPLETO");
+				String ehCoordenador = XmlUtils.getValorAtributo(integrante, "FLAG-RESPONSAVEL");
+				if (ehCoordenador.equals("SIM")) {
+					coordenadorProjeto = nome;
+				}
+			}
+			
+			if (anoVinculo == null || anoVinculo == "") {
+				anoVinculo = "0";
+			}
+			projetosPesquisa.add(new ProjetoPesquisa(Integer.parseInt(anoVinculo), titulo, coordenadorProjeto));
+		}
+		
+		
+	}
+	
+	private void setFormacoesAcademicas() {
+		
+	}
+
+	private void setAtuacoesProfissionais() {
+		
+	}
 	
 
 	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
