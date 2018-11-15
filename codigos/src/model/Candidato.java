@@ -22,6 +22,8 @@ public class Candidato {
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
 	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
 	
+	private int numeroSemestreSemReprovacao;
+	private boolean possuiVinculoInstituicao; // Deve ser calculado atraves de outros campos do lattes.
 	
 	public Candidato(String xmlPath) {
 		try {
@@ -131,10 +133,53 @@ public class Candidato {
 	}
 	
 	private void setFormacoesAcademicas() {
+		NodeList nos = XmlUtils.getNos(lattes, "FORMACAO-ACADEMICA-TITULACAO");
+		
+		if (nos.getLength() > 0) {
+			NodeList formacoes = nos.item(0).getChildNodes();
+			
+			for (int contador = 0; contador < formacoes.getLength(); contador++) {
+				Node no = formacoes.item(contador);
+				
+				String dataFormacao = XmlUtils.getValorAtributo(no, "ANO-DE-CONCLUSAO");
+				String nomeUniversidade = XmlUtils.getValorAtributo(no, "NOME-INSTITUICAO");
+				String titulo = no.getNodeName();
+				
+				if (dataFormacao == null || dataFormacao == "") {
+					dataFormacao = "0";
+				}
+				
+				formacoesAcademicas.add(new FormacaoAcademica(Integer.parseInt(dataFormacao), nomeUniversidade, titulo));
+				
+			}
+
+		}
+		
+		
 		
 	}
 
 	private void setAtuacoesProfissionais() {
+		
+		NodeList nos = XmlUtils.getNos(lattes, "VINCULOS"); // ATUACAO-PROFISSIONAL -> VINCULOS
+		for (int contador = 0; contador < nos.getLength(); contador++) {
+			Node no = nos.item(contador);
+
+			String anoInicio = XmlUtils.getValorAtributo(no, "ANO-INICIO");
+			String anoFim = XmlUtils.getValorAtributo(no, "ANO-FIM");
+			String localAtuacao = XmlUtils.getValorAtributo(no.getParentNode(), "NOME-INSTITUICAO");
+			String vinculo = XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO");
+			
+			if (anoInicio == null || anoInicio == "") {
+				anoInicio = "0";
+			}
+			
+			if (anoFim == null || anoFim == "") {
+				anoFim = "0";
+			}
+			
+			atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), Integer.parseInt(anoFim), localAtuacao, vinculo));
+		}	
 		
 	}
 	

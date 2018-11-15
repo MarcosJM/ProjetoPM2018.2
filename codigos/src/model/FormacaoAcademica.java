@@ -1,14 +1,15 @@
 package model;
 
-import java.util.Date;
-
 public class FormacaoAcademica {
 	
-    private Date dataFormacao;
-    
+	private int dataFormacao;
     private String nomeUniversidade;
+    private String titulo; // De qual formacao se trata. Exemplo: MESTRADO
 
-    // De qual formacao se trata. Exemplo: Mestrado
-    private String titulo;
-
+    public FormacaoAcademica(int dataFormacao, String nomeUniversidade, String titulo) {
+		this.dataFormacao = dataFormacao;
+		this.nomeUniversidade = nomeUniversidade;
+		this.titulo = titulo;
+	}
+    
 }
