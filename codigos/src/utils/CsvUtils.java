@@ -34,7 +34,7 @@ public class CsvUtils
                 dadosDoArquivo.add(linha.split(separador));
 
             }
-		}catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import utils.Constantes;
 import utils.XmlUtils;
 
 public class Candidato {
@@ -21,15 +22,19 @@ public class Candidato {
 	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
 	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
+	private ArrayList<Premio> premios = new ArrayList<Premio>();
 	
 	private int numeroSemestreSemReprovacao;
 	private boolean possuiVinculoInstituicao; // Deve ser calculado atraves de outros campos do lattes.
+	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
+	private int pontuacao = 0;
+		
 	
 	public Candidato(String xmlPath) {
 		try {
 			lattes = XmlUtils.lerXml(xmlPath, "CURRICULO-VITAE");
 			setNome();
-			setQuantidadePremios();
+			setPremios();
 			setArtigosCompletos();
 			setAtuacoesProfissionais();
 			setEventos();
@@ -39,6 +44,17 @@ public class Candidato {
 			System.out.println("Erro na leitura do lattes.");
 		}
 	}
+	
+	
+	public int getNumeroSemestreSemReprovacao() {
+		return numeroSemestreSemReprovacao;
+	}
+
+
+	public void setNumeroSemestreSemReprovacao(int numeroSemestreSemReprovacao) {
+		this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
+	}
+	
 	
 	private void setNome() {
 		nome = XmlUtils.getValorAtributo(lattes, "DADOS-GERAIS", "NOME-COMPLETO");
@@ -50,11 +66,31 @@ public class Candidato {
 	
 	// Numero de premios recebidos nos ultimos 10 anos.
 	// Itens na secao "PREMIOS-TITULOS" do lattes
-	public void setQuantidadePremios() {
-		quantidadePremios = XmlUtils.getQuantidadeNos(lattes, "PREMIO-TITULO");
+	public void setPremios() {
+		NodeList nos = XmlUtils.getNos(lattes, "PREMIO-TITULO");
+		for (int contador = 0; contador < nos.getLength(); contador++) {
+			Node no = nos.item(contador);
+			
+			// Dados do premio:
+			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-PREMIO-OU-TITULO");
+			String anoPremiacao = XmlUtils.getValorAtributo(no, "ANO-DA-PREMIACAO");
+			
+			int ano = 0;
+			if (anoPremiacao != null) {
+				ano = Integer.parseInt(anoPremiacao);
+			}
+			
+			if (ano >= Constantes.DATA_LIMITE) {
+				premios.add(new Premio(ano, nome));
+			}
+			
+		}
+		
 	}
-	public int getQuantidadePremios() {
-		return quantidadePremios;
+	
+	
+	public ArrayList<Premio> getPremios() {
+		return premios;
 	}
 	
 	
@@ -129,8 +165,8 @@ public class Candidato {
 			projetosPesquisa.add(new ProjetoPesquisa(Integer.parseInt(anoVinculo), titulo, coordenadorProjeto));
 		}
 		
-		
 	}
+	
 	
 	private void setFormacoesAcademicas() {
 		NodeList nos = XmlUtils.getNos(lattes, "FORMACAO-ACADEMICA-TITULACAO");
@@ -155,9 +191,9 @@ public class Candidato {
 
 		}
 		
-		
-		
 	}
+	
+	
 
 	private void setAtuacoesProfissionais() {
 		
@@ -184,7 +220,35 @@ public class Candidato {
 	}
 	
 
-	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
-	private float pontuacao = 0;
+	public int getPontuacao() {
+		pontuacao = 0;
+		
+		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovação no curso que a bolsa está sendo pleiteada
+		pontuacao += numeroSemestreSemReprovacao;
+		
+		// Premios:
+		pontuacao += getPontuacaoPremios();
+		
+		// RN3 - O candidato recebe três pontos por cada artigo pontuado como A1, A2 ou B1 na Qualis da Computação nos últimos 10 anos.
+		
+		
+		// RN4 - O candidato recebe três pontos por cada artigo pontuado como B2,B3,B4 ou B5 na Qualis da Computação nos últimos 10 anos.
+		
+		// RN5 - O candidato recebe um ponto por cada evento participado. O máximo de pontos por esse requisito são cinco.
+		
+		// RN6 - O candidato recebe um ponto se houver registro de vínculo com a UNIRIO nos últimos 10 anos, seja por participação 
+		// em projetos, bolsas de pesquisa, representação discente ou similar.
+		
+		return pontuacao;
+		
+	}
+
+	/**
+	 * RN2 - O candidato recebe um ponto por cada prêmio recebido nos últimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoPremios() {
+		return premios.size();
+	}
 
 }

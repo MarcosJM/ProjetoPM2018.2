@@ -18,7 +18,8 @@ class CandidatoTest {
 	@Test
 	void testGetQuantidadePremios() {
 		Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml");
-		assertEquals(1, candidato.getQuantidadePremios());
+		assertEquals(1, candidato.getPremios().size());
 	}
+
 
 }
