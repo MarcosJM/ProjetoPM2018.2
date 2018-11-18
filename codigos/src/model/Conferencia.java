@@ -1,18 +1,15 @@
 package model;
 
-public class Periodico {
+public class Conferencia {
 	
 	public String nome;
-	private String issn;
 	private QualisEnum qualis; // Obtido atraves de consulta ao site Qualis ou de outra forma.
 
-	public Periodico(String issn, String nome) {
+	public Conferencia(String nome) {
 		this.nome = nome;
-		this.issn = issn;
 	}
-	
+
 	public QualisEnum getQualis() {
 		return qualis;
 	}
-
 }

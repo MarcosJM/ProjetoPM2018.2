@@ -60,5 +60,13 @@ public class ComissaoBolsasController {
 	}
 	
 	
+	// Incompleto
+	public String exibeArtigosQualisRestrito(boolean verboso) {
+		return "";
+	}
+	// Incompleto
+	public String exibeArtigosQualisCompleto(boolean verboso) {
+		return "";
+	}
 
 }

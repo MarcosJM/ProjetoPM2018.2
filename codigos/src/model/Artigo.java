@@ -2,7 +2,8 @@ package model;
 
 public class Artigo {
 	
-	private Periodico periodico;
+	private Periodico periodico = null;
+	private Conferencia conferencia = null;
     private int anoPublicacao;
     private String titulo;
 	
@@ -12,4 +13,15 @@ public class Artigo {
 		this.anoPublicacao = anoPublicacao;
 	}
 
+    public Artigo(String titulo, Conferencia conferencia, int anoPublicacao) {
+    	this.titulo = titulo;
+		this.conferencia = conferencia;
+		this.anoPublicacao = anoPublicacao;
+	}
+    
+    public QualisEnum getQualis() {
+    	if (periodico != null)
+    		return periodico.getQualis();
+    	return conferencia.getQualis();
+    }
 }

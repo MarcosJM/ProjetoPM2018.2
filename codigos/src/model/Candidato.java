@@ -18,6 +18,10 @@ public class Candidato {
 	private String nome;
 	private int quantidadePremios;
 	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>();
+	
+	private ArrayList<Artigo> artigosCompletosQualisRestrito = new ArrayList<Artigo>();
+	private ArrayList<Artigo> artigosCompletosQualisCompleto = new ArrayList<Artigo>();
+	
 	private ArrayList<Evento> eventos = new ArrayList<Evento>();
 	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
@@ -94,30 +98,112 @@ public class Candidato {
 	}
 	
 	
-	private void setArtigosCompletos() {
+	/**
+	 * Adiciona artigos publicados em periodicos ao ArrayList<Artigo> artigos.
+	 */
+	private void adicionarArtigosPeriodicos() {
+		
 		NodeList nos = XmlUtils.getNos(lattes, "ARTIGOS-PUBLICADOS");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			Node no = nos.item(contador);
 			
-			// Dados do artigo:
-			String anoPublicacao = XmlUtils.getValorAtributo(no, "ANO-DO-ARTIGO");
-			String titulo = XmlUtils.getValorAtributo(no, "TITULO-DO-ARTIGO");
+			Node dadosBasicos = no.getFirstChild();
+			String natureza = XmlUtils.getValorAtributo(dadosBasicos, "NATUREZA");
 			
-			// Dados do periodico:
-			Node detalhes = no.getFirstChild();
-			String nomePeriodico = XmlUtils.getValorAtributo(detalhes, "TITULO-DO-PERIODICO-OU-REVISTA");
-			String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
-			Periodico periodico = new Periodico(issn, nomePeriodico);
-			
-			int ano = 0;
-			if (anoPublicacao != null) {
-				ano = Integer.parseInt(anoPublicacao);
+			if (natureza.equals("COMPLETO")) {
+				// Dados do artigo:
+				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-ARTIGO");
+				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-ARTIGO");
+				
+				// Dados do periodico:
+				Node detalhes = dadosBasicos.getNextSibling();
+				String nomePeriodico = XmlUtils.getValorAtributo(detalhes, "TITULO-DO-PERIODICO-OU-REVISTA");
+				String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
+				Periodico periodico = new Periodico(issn, nomePeriodico);
+				
+				int ano = 0;
+				if (anoPublicacao != null) {
+					ano = Integer.parseInt(anoPublicacao);
+				}
+				if (ano >= Constantes.DATA_LIMITE) {
+					artigosCompletos.add(new Artigo(titulo, periodico, ano));
+				}
+				
 			}
-			artigosCompletos.add(new Artigo(titulo, periodico, ano));
+			
 		}
-		
 	}
 	
+	
+	/**
+	 * Adiciona artigos publicados em conferencias ao ArrayList<Artigo> artigos.
+	 */
+	private void adicionarArtigosConferencias() {
+		NodeList nos = XmlUtils.getNos(lattes, "TRABALHOS-EM-EVENTOS");
+		for (int contador = 0; contador < nos.getLength(); contador++) {
+			Node no = nos.item(contador);
+			
+			Node dadosBasicos = no.getFirstChild();
+			String natureza = XmlUtils.getValorAtributo(dadosBasicos, "NATUREZA");
+			
+			if (natureza.equals("COMPLETO")) {
+				// Dados do artigo:
+				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-TRABALHO");
+				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-TRABALHO");
+				
+				// Dados da conferencia:
+				Node detalhes = dadosBasicos.getNextSibling();
+				String nomeEvento = XmlUtils.getValorAtributo(detalhes, "NOME-DO-EVENTO");
+				Conferencia conferencia = new Conferencia(nomeEvento);
+				
+				int ano = 0;
+				if (anoPublicacao != null) {
+					ano = Integer.parseInt(anoPublicacao);
+				}
+				if (ano >= Constantes.DATA_LIMITE) {
+					artigosCompletos.add(new Artigo(titulo, conferencia, ano));
+				}
+				
+			}
+			
+		}
+	}
+	
+	
+	/**
+	 * Captura todos os artigos do lattes e divide entre os que sao qualis restrito e qualis completo.
+	 */
+	private void setArtigosCompletos() {
+		adicionarArtigosPeriodicos();
+		adicionarArtigosConferencias();
+	
+		// Divide em qualis restrito e completo:
+		for (Artigo artigo : artigosCompletos) {
+			QualisEnum qualis = artigo.getQualis();
+			
+			if (qualis == QualisEnum.A1 || 
+				qualis == QualisEnum.A2 || 
+				qualis == QualisEnum.B1) {
+				artigosCompletosQualisRestrito.add(artigo);
+			}
+			
+			if (qualis == QualisEnum.B2 || 
+				qualis == QualisEnum.B3 || 
+				qualis == QualisEnum.B4 || 
+				qualis == QualisEnum.B5) {
+				artigosCompletosQualisCompleto.add(artigo);
+			}
+		}
+	
+	}
+	
+	public ArrayList<Artigo> getArtigosCompletosQualisRestrito() {
+		return artigosCompletosQualisRestrito;
+	}
+	
+	public ArrayList<Artigo> getArtigosCompletosQualisCompleto() {
+		return artigosCompletosQualisCompleto;
+	}
 	
 	// Funcao auxiliar para adicionar nos do XML lattes na lista de eventos do candidato.
 	private void adicionarEventosListaEventos(NodeList nos) {
@@ -129,7 +215,7 @@ public class Candidato {
 	}
 	
 	
-	// Pode ser um congresso, simpósio, encontro ou outro.
+	// Pode ser um congresso, simposio, encontro ou outro.
 	private void setEventos() {
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DADOS-BASICOS-DA-PARTICIPACAO-EM-SIMPOSIO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-CONGRESSO"));
@@ -223,32 +309,55 @@ public class Candidato {
 	public int getPontuacao() {
 		pontuacao = 0;
 		
-		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovação no curso que a bolsa está sendo pleiteada
+		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovacao no curso que a bolsa esta sendo pleiteada
 		pontuacao += numeroSemestreSemReprovacao;
 		
 		// Premios:
 		pontuacao += getPontuacaoPremios();
 		
-		// RN3 - O candidato recebe três pontos por cada artigo pontuado como A1, A2 ou B1 na Qualis da Computação nos últimos 10 anos.
+		// Artigos:
+		pontuacao += getPontuacaoQualisRestrito();
+		pontuacao += getPontuacaoQualisCompleto();
+				
 		
+		// RN5 - O candidato recebe um ponto por cada evento participado. O maximo de pontos por esse requisito sao cinco.
 		
-		// RN4 - O candidato recebe três pontos por cada artigo pontuado como B2,B3,B4 ou B5 na Qualis da Computação nos últimos 10 anos.
-		
-		// RN5 - O candidato recebe um ponto por cada evento participado. O máximo de pontos por esse requisito são cinco.
-		
-		// RN6 - O candidato recebe um ponto se houver registro de vínculo com a UNIRIO nos últimos 10 anos, seja por participação 
-		// em projetos, bolsas de pesquisa, representação discente ou similar.
+		// RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO nos ultimos 10 anos, seja por participacao 
+		// em projetos, bolsas de pesquisa, representacao discente ou similar.
 		
 		return pontuacao;
 		
 	}
 
+	
 	/**
-	 * RN2 - O candidato recebe um ponto por cada prêmio recebido nos últimos 10 anos.
+	 * RN2 - O candidato recebe um ponto por cada premio recebido nos ultimos 10 anos.
 	 * @return int, quantidade de pontos dessa categoria.
 	 */
 	public int getPontuacaoPremios() {
 		return premios.size();
 	}
+	
+	
+	/**
+	 * RN3 - O candidato recebe tres pontos por cada artigo pontuado como A1, A2 ou B1 
+	 * na Qualis da Computacao nos ultimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoQualisRestrito() {
+		return artigosCompletosQualisRestrito.size() * 3;
+	
+	}
+	
+	
+	/**
+	 * RN4 - O candidato recebe um ponto por cada artigo pontuado como B2, B3, B4 ou B5 
+	 * na Qualis da Computacao nos ultimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoQualisCompleto() {
+		return artigosCompletosQualisCompleto.size();
+	}
+	
 
 }
