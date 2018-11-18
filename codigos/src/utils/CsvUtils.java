@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * 
- * @author pinho
- *
  * Classe que realiza a leitura de arquivos CSV
  */
 public class CsvUtils 
@@ -17,11 +14,11 @@ public class CsvUtils
 	
 	/**
 	 * 
-	 * @param endereco - String que indica o caminho até o arquivo
+	 * @param endereco - String que indica o caminho ate o arquivo
 	 * @param separador - String que indica o tipo de separador utilizado no arquivo csv
 	 * @return ArrayList<String[]> contendo os dados do arquivo
-	 * @throws FileNotFound exception caso o arquivo não seja encontrado
-	 * @throws IOException caso não seja mais possível acessar o arquivo
+	 * @throws FileNotFound exception caso o arquivo nao seja encontrado
+	 * @throws IOException caso nao seja mais possivel acessar o arquivo
 	 */
 	public static ArrayList<String[]> lerCsv(String endereco, String separador)
 	{
@@ -33,7 +30,7 @@ public class CsvUtils
 			while ((linha = leitor.readLine()) != null) 
 			{
 				
-				//para cada linha do arquivo, realiza um split pelo separador (vírgula, ponto e vírgula, etc) e adiciona à arrayList
+				//para cada linha do arquivo, realiza um split pelo separador (virgula, ponto e virgula, etc) e adiciona a arrayList
                 dadosDoArquivo.add(linha.split(separador));
 
             }
@@ -52,6 +49,9 @@ public class CsvUtils
         }
 		return dadosDoArquivo;
 	}
+	
+	
+	
 	
 }
  

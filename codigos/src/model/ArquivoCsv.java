@@ -1,25 +1,27 @@
-package utils;
+package model;
 
 import java.util.ArrayList;
+
+import utils.Constantes;
+import utils.CsvUtils;
+
 /**
  * 
- * @author pinho
- *
  *  Classe que realiza o processamento de arquivos CSV
  */
 public class ArquivoCsv {
-	private ArrayList<String[]> dadosCsv= new ArrayList<String[]>();
+	private ArrayList<String[]> dadosCsv = new ArrayList<String[]>();
 	private int quantidadeLinhas;
 	private int quantidadeColunas;
 	
 	/**
-	 * Construtor - Cria uma instância de um arquivo CSV.
-	 * @param endereco - String que indica o caminho até o arquivo
+	 * Construtor - Cria uma instancia de um arquivo CSV.
+	 * @param endereco - String que indica o caminho ate o arquivo
 	 * @param separador - String que indica o tipo de separador utilizado no arquivo csv
 	 */
 	public ArquivoCsv(String endereco, String separador)
 	{
-		CsvUtils inicializadorCsv= new CsvUtils();
+		CsvUtils inicializadorCsv = new CsvUtils();
 		this.dadosCsv = inicializadorCsv.lerCsv(endereco, separador);
 		this.quantidadeLinhas = dadosCsv.size();
 		this.quantidadeColunas = dadosCsv.get(0).length;
@@ -44,10 +46,10 @@ public class ArquivoCsv {
 	}
 	
 	/**
-	 * retorna o elemento contido na localização indicada
-	 * @param locLinha, int - índice da linha
-	 * @param locColuna, int - índice da coluna
-	 * @return retorna o elemento encontrado, ou então uma string vazia
+	 * retorna o elemento contido na localizacao indicada
+	 * @param locLinha, int - indice da linha
+	 * @param locColuna, int - indice da coluna
+	 * @return retorna o elemento encontrado, ou entao uma string vazia
 	 */
 	public String getElemento(int locLinha, int locColuna)
 	{
@@ -59,10 +61,10 @@ public class ArquivoCsv {
 			{
 				return linha[locColuna];
 			}else {
-				System.err.println("O endereço da coluna está fora dos limites.");
+				System.err.println("O endereco da coluna esta fora dos limites.");
 			}
 		}else {
-			System.err.println("O endereço da linha está fora dos limites.");
+			System.err.println("O endereco da linha esta fora dos limites.");
 		}
 		return "";
 		
@@ -71,9 +73,9 @@ public class ArquivoCsv {
 	}
 	
 	/**
-	 * recebe o nome de uma coluna e retora a sua posição no array
+	 * recebe o nome de uma coluna e retora a sua posicao no array
 	 * @param nomeColuna, String - nome da coluna desejada
-	 * @return retorna a posição da coluna desejada, ou -1 se nada for encontrado
+	 * @return retorna a posicao da coluna desejada, ou -1 se nada for encontrado
 	 */
 	private int getPosicaoColuna(String nomeColuna)
 	{
@@ -104,7 +106,7 @@ public class ArquivoCsv {
 				elementosColuna[iterator - 1] = this.dadosCsv.get(iterator)[indiceColuna];
 			}
 		}else {
-			System.err.println("Coluna não existente.");
+			System.err.println("Coluna nao existente.");
 		}
 		
 		return Constantes.ARRAY_VAZIO;
