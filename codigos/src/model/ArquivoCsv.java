@@ -91,6 +91,29 @@ public class ArquivoCsv {
 	}
 	
 	/**
+	 * @param indiceLinha, int - índice da linha da qual deseja-se obter os elementos
+	 * @return retorna uma lista com os elementos da linha, ou um array vazio se a linha for inexistente
+	 */
+	public String[] getElementosLinha(int indiceLinha)
+	{
+		if (indiceLinha < this.getQuantidadeLinhas())
+		{
+			int quantidadeColunas = this.getQuantidadeColunas();
+			String[] elementosLinha = new String[quantidadeColunas];
+			for (int iterator = 0; iterator < quantidadeColunas; iterator ++)
+			{
+				elementosLinha[iterator] = dadosCsv.get(iterator)[indiceLinha];
+			}
+			return elementosLinha;
+		}else {
+			System.err.println("Linha não existente.");
+			return Constantes.ARRAY_VAZIO;
+		}
+		
+		
+	}
+	
+	/**
 	 * retorna todos os elementos de determinada coluna
 	 * @param nomeColuna, String - nome da coluna desejada
 	 * @return Array de Strrings com cada elemento da coluna desejada, ou um array vazio se a coluna for inexistente.
