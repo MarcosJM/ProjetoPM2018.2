@@ -45,6 +45,24 @@ public class ArquivoCsv {
 		return this.quantidadeColunas;
 	}
 	
+	
+	public String getElemento(String nomeColuna, int locLinha)
+	//Para um futuro próximo: padronizar os nomes loc, indice e posição pois se referem à mesma coisa
+	{
+		if (locLinha < this.getQuantidadeLinhas())
+		{
+			String[] linha = dadosCsv.get(locLinha);
+			int indiceColuna = this.getPosicaoColuna(nomeColuna);
+			if (indiceColuna != -1)
+			{
+				return linha[indiceColuna];
+			}	
+		}else {
+			System.err.println("O endereco da linha esta fora dos limites.");
+		}
+		return "";
+	}
+	
 	/**
 	 * retorna o elemento contido na localizacao indicada
 	 * @param locLinha, int - indice da linha
@@ -92,30 +110,28 @@ public class ArquivoCsv {
 	
 	
 	/**
-	 * retorna a posição de um elemento dada uma determinada coluna
-	 * @param nomeColuna, String - nome da coluna onde o elemento desejado pertence
-	 * @param elemento, String - elemento desejado
-	 * @return int correspondente ao índice do elemento, ou -1 se o elemento não for encontrado
+	 * retorna o índice da linha de um elemento dado o próprio e o nome de sua coluna
+	 * @param nomeColuna, String - nome da coluna desejada
+	 * @param elemento, String - elemento cujo índice deseja-se saber
+	 * @return int correspondente ao índice da linha do elemento, ou -1 se o índice não for encontrado.
 	 */
-	public int getPosicaoElemento(String nomeColuna, String elemento)
+	public int getLinhaElemento(String nomeColuna, String elemento)
 	{
-		String[] elementosColuna = this.getElementosColuna(nomeColuna);
-		int quantidadeElementos = elementosColuna.length;
-		if (quantidadeElementos > 0)
+		int posicaoColuna = this.getPosicaoColuna(nomeColuna);
+		if (posicaoColuna != -1)
 		{
-			for(int iterator = 0; iterator < quantidadeElementos; iterator ++)
+			int quantidadeLinhas = this.getQuantidadeLinhas();
+			for (int iterator = 0; iterator < quantidadeLinhas; iterator ++)
 			{
-				if (elementosColuna[iterator].equals(elemento))
+				if (this.dadosCsv.get(iterator)[posicaoColuna].equals(elemento))
 				{
-					//essa forma de retornar leva em conta que cada elemento no arquivo é único.
+					//essa forma de retorno leva em conta que cada elemento na tabela é único.
 					return iterator;
 				}
 			}
-			//faltando: mensagem de erro caso o elemento não exista.
-			//eu estava pensando em usar o valor de iterator, mas não tenho certeza do que acontece quando o laço termina.
+			//faltando: mensagem para informar quando o elemento não foi encontrado.
 		}
 		return -1;
-		
 	}
 	
 	/**
