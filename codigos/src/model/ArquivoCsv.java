@@ -90,9 +90,38 @@ public class ArquivoCsv {
 		return -1;
 	}
 	
+	
 	/**
+	 * retorna a posição de um elemento dada uma determinada coluna
+	 * @param nomeColuna, String - nome da coluna onde o elemento desejado pertence
+	 * @param elemento, String - elemento desejado
+	 * @return int correspondente ao índice do elemento, ou -1 se o elemento não for encontrado
+	 */
+	public int getPosicaoElemento(String nomeColuna, String elemento)
+	{
+		String[] elementosColuna = this.getElementosColuna(nomeColuna);
+		int quantidadeElementos = elementosColuna.length;
+		if (quantidadeElementos > 0)
+		{
+			for(int iterator = 0; iterator < quantidadeElementos; iterator ++)
+			{
+				if (elementosColuna[iterator].equals(elemento))
+				{
+					//essa forma de retornar leva em conta que cada elemento no arquivo é único.
+					return iterator;
+				}
+			}
+			//faltando: mensagem de erro caso o elemento não exista.
+			//eu estava pensando em usar o valor de iterator, mas não tenho certeza do que acontece quando o laço termina.
+		}
+		return -1;
+		
+	}
+	
+	/**
+	 * retorna todos os elementos de uma linha
 	 * @param indiceLinha, int - índice da linha da qual deseja-se obter os elementos
-	 * @return retorna uma lista com os elementos da linha, ou um array vazio se a linha for inexistente
+	 * @return Array de Strings com os elementos da linha, ou um array vazio se a linha for inexistente
 	 */
 	public String[] getElementosLinha(int indiceLinha)
 	{
