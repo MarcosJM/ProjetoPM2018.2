@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import controller.ProfessorController;
 import utils.Constantes;
 import utils.XmlUtils;
 
@@ -26,10 +27,14 @@ public class Candidato {
 	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
 	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
+	
+	private ArrayList<Vinculo> vinculos = new ArrayList<Vinculo>();
+	
 	private ArrayList<Premio> premios = new ArrayList<Premio>();
 	
 	private int numeroSemestreSemReprovacao;
-	private boolean possuiVinculoInstituicao; // Deve ser calculado atraves de outros campos do lattes.
+	private boolean possuiVinculoInstituicao = false; // Deve ser calculado atraves de outros campos do lattes.
+	
 	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
 	private int pontuacao = 0;
 		
@@ -44,6 +49,9 @@ public class Candidato {
 			setEventos();
 			setFormacoesAcademicas();
 			setProjetosPesquisa();
+			
+			setVinculoInstituicao();
+			
 		} catch (Exception e) {
 			System.out.println("Erro na leitura do lattes.");
 		}
@@ -84,7 +92,7 @@ public class Candidato {
 				ano = Integer.parseInt(anoPremiacao);
 			}
 			
-			if (ano >= Constantes.DATA_LIMITE) {
+			if (ano >= Constantes.ANO_LIMITE) {
 				premios.add(new Premio(ano, nome));
 			}
 			
@@ -125,7 +133,7 @@ public class Candidato {
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
-				if (ano >= Constantes.DATA_LIMITE) {
+				if (ano >= Constantes.ANO_LIMITE) {
 					artigosCompletos.add(new Artigo(titulo, periodico, ano));
 				}
 				
@@ -160,7 +168,7 @@ public class Candidato {
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
-				if (ano >= Constantes.DATA_LIMITE) {
+				if (ano >= Constantes.ANO_LIMITE) {
 					artigosCompletos.add(new Artigo(titulo, conferencia, ano));
 				}
 				
@@ -209,6 +217,10 @@ public class Candidato {
 		return eventos;
 	}
 	
+	public ArrayList<Vinculo> getVinculos() {
+		return vinculos;
+	}
+	
 	
 	// Funcao auxiliar para adicionar nos do XML lattes na lista de eventos do candidato.
 	private void adicionarEventosListaEventos(NodeList nos) {
@@ -238,7 +250,9 @@ public class Candidato {
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DE-OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS"));
 	}
 	
-	
+	/**
+	 * Projetos dos ultimos 10 anos.
+	 */
 	private void setProjetosPesquisa() {
 		
 		NodeList nos = XmlUtils.getNos(lattes, "PROJETO-DE-PESQUISA");
@@ -262,12 +276,19 @@ public class Candidato {
 			if (anoVinculo == null || anoVinculo == "") {
 				anoVinculo = "0";
 			}
-			projetosPesquisa.add(new ProjetoPesquisa(Integer.parseInt(anoVinculo), titulo, coordenadorProjeto));
+			
+			int ano = Integer.parseInt(anoVinculo);
+			if (ano >= Constantes.ANO_LIMITE) {
+				projetosPesquisa.add(new ProjetoPesquisa(ano, titulo, coordenadorProjeto));
+			}
+		
 		}
 		
 	}
 	
-	
+	/**
+	 * Ano de formacao nos ultimos 10 anos.
+	 */
 	private void setFormacoesAcademicas() {
 		NodeList nos = XmlUtils.getNos(lattes, "FORMACAO-ACADEMICA-TITULACAO");
 		
@@ -285,7 +306,10 @@ public class Candidato {
 					dataFormacao = "0";
 				}
 				
-				formacoesAcademicas.add(new FormacaoAcademica(Integer.parseInt(dataFormacao), nomeUniversidade, titulo));
+				int ano = Integer.parseInt(dataFormacao);
+				if (ano >= Constantes.ANO_LIMITE) {
+					formacoesAcademicas.add(new FormacaoAcademica(ano, nomeUniversidade, titulo));
+				}
 				
 			}
 
@@ -294,7 +318,9 @@ public class Candidato {
 	}
 	
 	
-
+	/**
+	 * Atuacoes nos ultimos 10 anos, ou atuais.
+	 */
 	private void setAtuacoesProfissionais() {
 		
 		NodeList nos = XmlUtils.getNos(lattes, "VINCULOS"); // ATUACAO-PROFISSIONAL -> VINCULOS
@@ -304,20 +330,70 @@ public class Candidato {
 			String anoInicio = XmlUtils.getValorAtributo(no, "ANO-INICIO");
 			String anoFim = XmlUtils.getValorAtributo(no, "ANO-FIM");
 			String localAtuacao = XmlUtils.getValorAtributo(no.getParentNode(), "NOME-INSTITUICAO");
-			String vinculo = XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO");
+			
+			String descricaoVinculo = 
+					XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO") + ";" +
+					XmlUtils.getValorAtributo(no, "OUTRO-VINCULO-INFORMADO") + ";" +
+					XmlUtils.getValorAtributo(no, "OUTRO-ENQUADRAMENTO-FUNCIONAL-INFORMADO");
+			
 			
 			if (anoInicio == null || anoInicio == "") {
 				anoInicio = "0";
 			}
 			
+			// Pode ser uma atuacao vigente, sem ano final.
 			if (anoFim == null || anoFim == "") {
-				anoFim = "0";
+				anoFim = String.valueOf(Constantes.SEM_ANO);
 			}
 			
-			atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), Integer.parseInt(anoFim), localAtuacao, vinculo));
+			int anoFinal = Integer.parseInt(anoFim);
+			if (anoFinal >= Constantes.ANO_LIMITE) {
+				atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), anoFinal, localAtuacao, descricaoVinculo));
+			}
+			
 		}	
 		
 	}
+	
+		
+	/**
+	 * Altera a variavel possuiVinculoInstituicao para true se nos ultimos 10 anos o candidato:
+	 * 1. Participou em projetos cujo coordenador eh um professor da UNIRIO.
+	 * 2. Tem formacao academica/bolsas cuja instituicao eh a UNIRIO.
+	 * 3. Possui alguma atuacao profissional cuja instituicao eh a UNIRIO (aqui estao
+	 * inclusas representacao discente ou outras).
+	 */
+	private void setVinculoInstituicao() {
+		// Projetos:
+		for (ProjetoPesquisa projeto : projetosPesquisa) {
+			if (ProfessorController.ehProfessorUnirio(projeto.getCoordenadorProjeto())) {
+				vinculos.add(new Vinculo(projeto.getAnoVinculo(), projeto.getTitulo(), "Projeto de Pesquisa"));
+			}
+		}
+		
+		
+		// Formacao academica:
+		for (FormacaoAcademica formacao : formacoesAcademicas) {
+			if (formacao.getNomeUniversidade().contains("Universidade Federal do Estado do Rio de Janeiro")) {
+				vinculos.add(new Vinculo(formacao.getDataFormacao(), formacao.getTitulo(), "Formacao academica"));
+			}
+		}
+		
+		
+		// Atuacao profissional:
+		for (AtuacaoProfissional atuacao : atuacoesProfissionais) {
+			if (atuacao.getLocalAtuacao().contains("Universidade Federal do Estado do Rio de Janeiro")) {
+				vinculos.add(new Vinculo(atuacao.getAnoFim(), atuacao.getDescricaoVinculo(), "Formacao academica"));
+			}
+		}
+		
+		
+		if (vinculos.size() > 0) {
+			possuiVinculoInstituicao = true;
+		}
+		
+	}
+	
 	
 
 	public int getPontuacao() {
@@ -336,8 +412,8 @@ public class Candidato {
 		// Eventos:
 		pontuacao += getPontuacaoEventos();
 		
-		// RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO nos ultimos 10 anos, seja por participacao 
-		// em projetos, bolsas de pesquisa, representacao discente ou similar.
+		// Vinculos:
+		pontuacao += getPontuacaoVinculos();
 		
 		return pontuacao;
 		
@@ -384,6 +460,21 @@ public class Candidato {
 			return 5;
 		} else {
 			return eventos.size();
+		}
+	}
+	
+	
+	/**
+	 * RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO 
+	 * nos ultimos 10 anos, seja por participacao em projetos, 
+	 * bolsas de pesquisa, representacao discente ou similar.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoVinculos() {
+		if (possuiVinculoInstituicao) {
+			return 1;
+		} else {
+			return 0;
 		}
 	}
 	

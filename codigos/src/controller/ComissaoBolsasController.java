@@ -6,6 +6,7 @@ import model.Artigo;
 import model.Candidato;
 import model.Evento;
 import model.Premio;
+import model.Vinculo;
 
 /**
  * Classe para avaliacao dos parametros de entrada.
@@ -154,13 +155,13 @@ public class ComissaoBolsasController {
 	
 	
 	
-	// Incompleto.
+	
 	/** 
 	 * Gera a saida referente a existencia de vinculo com a UNIRIO.
 	 * Comando: -vi
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 * @return String, candidatos, sua pontuacao e os vinculos, opcionalmente.
-	 
+	*/ 
 	public String exibeVinculos(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de vinculos	Pontuacao de vinculos");
 		
@@ -171,9 +172,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getVinculos().size() > 0) {
 				// Exibe detalhes dos vinculos.
-				conteudo.append("\r\nAno	Evento	Qualis"); // o ano, vínculo associado.
-				for (Evento evento : candidato.getVinculos()) {
-					conteudo.append(evento);
+				conteudo.append("\r\nAno	Vinculo");
+				for (Vinculo vinculo : candidato.getVinculos()) {
+					conteudo.append(vinculo);
 					conteudo.append("\r\n");
 				}
 			}
@@ -181,7 +182,7 @@ public class ComissaoBolsasController {
 		}
 		return conteudo.toString();
 	}
-	*/
+	
 	
 	
 	
