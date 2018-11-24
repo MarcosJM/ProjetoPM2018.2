@@ -205,24 +205,38 @@ public class Candidato {
 		return artigosCompletosQualisCompleto;
 	}
 	
+	public ArrayList<Evento> getEventos() {
+		return eventos;
+	}
+	
+	
 	// Funcao auxiliar para adicionar nos do XML lattes na lista de eventos do candidato.
 	private void adicionarEventosListaEventos(NodeList nos) {
 		Node no;
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			no = nos.item(contador);
-			eventos.add(new Evento(XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO")));
+			Node dadosBasicos = no.getPreviousSibling();
+			
+			String ano = XmlUtils.getValorAtributo(dadosBasicos, "ANO");
+			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO");
+			
+			if (ano == null || ano == "") {
+				ano = "0";
+			}
+			
+			eventos.add(new Evento(Integer.parseInt(ano), nome));
+			
 		}
 	}
-	
+
 	
 	// Pode ser um congresso, simposio, encontro ou outro.
 	private void setEventos() {
-		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DADOS-BASICOS-DA-PARTICIPACAO-EM-SIMPOSIO"));
+		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-SIMPOSIO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-CONGRESSO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-ENCONTRO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DE-OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS"));
 	}
-	
 	
 	
 	private void setProjetosPesquisa() {
@@ -319,8 +333,8 @@ public class Candidato {
 		pontuacao += getPontuacaoQualisRestrito();
 		pontuacao += getPontuacaoQualisCompleto();
 				
-		
-		// RN5 - O candidato recebe um ponto por cada evento participado. O maximo de pontos por esse requisito sao cinco.
+		// Eventos:
+		pontuacao += getPontuacaoEventos();
 		
 		// RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO nos ultimos 10 anos, seja por participacao 
 		// em projetos, bolsas de pesquisa, representacao discente ou similar.
@@ -357,6 +371,20 @@ public class Candidato {
 	 */
 	public int getPontuacaoQualisCompleto() {
 		return artigosCompletosQualisCompleto.size();
+	}
+	
+	
+	/**
+	 * RN5 - O candidato recebe um ponto por cada evento participado. 
+	 * O maximo de pontos por esse requisito sao cinco.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoEventos() {
+		if (eventos.size() > 5) {
+			return 5;
+		} else {
+			return eventos.size();
+		}
 	}
 	
 
