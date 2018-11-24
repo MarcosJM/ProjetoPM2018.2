@@ -45,6 +45,24 @@ public class ArquivoCsv {
 		return this.quantidadeColunas;
 	}
 	
+	
+	public String getElemento(String nomeColuna, int locLinha)
+	//Para um futuro próximo: padronizar os nomes loc, indice e posição pois se referem à mesma coisa
+	{
+		if (locLinha < this.getQuantidadeLinhas())
+		{
+			String[] linha = dadosCsv.get(locLinha);
+			int indiceColuna = this.getPosicaoColuna(nomeColuna);
+			if (indiceColuna != -1)
+			{
+				return linha[indiceColuna];
+			}	
+		}else {
+			System.err.println("O endereco da linha esta fora dos limites.");
+		}
+		return "";
+	}
+	
 	/**
 	 * retorna o elemento contido na localizacao indicada
 	 * @param locLinha, int - indice da linha
@@ -88,6 +106,56 @@ public class ArquivoCsv {
 			}
 		}
 		return -1;
+	}
+	
+	
+	/**
+	 * retorna o índice da linha de um elemento dado o próprio e o nome de sua coluna
+	 * @param nomeColuna, String - nome da coluna desejada
+	 * @param elemento, String - elemento cujo índice deseja-se saber
+	 * @return int correspondente ao índice da linha do elemento, ou -1 se o índice não for encontrado.
+	 */
+	public int getLinhaElemento(String nomeColuna, String elemento)
+	{
+		int posicaoColuna = this.getPosicaoColuna(nomeColuna);
+		if (posicaoColuna != -1)
+		{
+			int quantidadeLinhas = this.getQuantidadeLinhas();
+			for (int iterator = 0; iterator < quantidadeLinhas; iterator ++)
+			{
+				if (this.dadosCsv.get(iterator)[posicaoColuna].equals(elemento))
+				{
+					//essa forma de retorno leva em conta que cada elemento na tabela é único.
+					return iterator;
+				}
+			}
+			//faltando: mensagem para informar quando o elemento não foi encontrado.
+		}
+		return -1;
+	}
+	
+	/**
+	 * retorna todos os elementos de uma linha
+	 * @param indiceLinha, int - índice da linha da qual deseja-se obter os elementos
+	 * @return Array de Strings com os elementos da linha, ou um array vazio se a linha for inexistente
+	 */
+	public String[] getElementosLinha(int indiceLinha)
+	{
+		if (indiceLinha < this.getQuantidadeLinhas())
+		{
+			int quantidadeColunas = this.getQuantidadeColunas();
+			String[] elementosLinha = new String[quantidadeColunas];
+			for (int iterator = 0; iterator < quantidadeColunas; iterator ++)
+			{
+				elementosLinha[iterator] = dadosCsv.get(iterator)[indiceLinha];
+			}
+			return elementosLinha;
+		}else {
+			System.err.println("Linha não existente.");
+			return Constantes.ARRAY_VAZIO;
+		}
+		
+		
 	}
 	
 	/**
