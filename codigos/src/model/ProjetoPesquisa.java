@@ -11,5 +11,17 @@ public class ProjetoPesquisa {
 		this.titulo = titulo;
 		this.coordenadorProjeto = coordenadorProjeto;
 	}
+    
+    public String getCoordenadorProjeto() {
+    	return coordenadorProjeto;
+    }
+
+	public int getAnoVinculo() {
+		return anoVinculo;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
 
 }
