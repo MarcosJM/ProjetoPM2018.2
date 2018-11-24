@@ -1,8 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,7 +15,6 @@ public class Candidato {
 	private Document lattes;
 	
 	private String nome;
-	private int quantidadePremios;
 	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>();
 	
 	private ArrayList<Artigo> artigosCompletosQualisRestrito = new ArrayList<Artigo>();
@@ -51,6 +48,7 @@ public class Candidato {
 			setProjetosPesquisa();
 			
 			setVinculoInstituicao();
+			setPontuacao();
 			
 		} catch (Exception e) {
 			System.out.println("Erro na leitura do lattes.");
@@ -396,7 +394,7 @@ public class Candidato {
 	
 	
 
-	public int getPontuacao() {
+	private void setPontuacao() {
 		pontuacao = 0;
 		
 		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovacao no curso que a bolsa esta sendo pleiteada
@@ -415,10 +413,12 @@ public class Candidato {
 		// Vinculos:
 		pontuacao += getPontuacaoVinculos();
 		
-		return pontuacao;
-		
 	}
 
+	public int getPontuacao() {
+		return pontuacao;
+	}
+	
 	
 	/**
 	 * RN2 - O candidato recebe um ponto por cada premio recebido nos ultimos 10 anos.
@@ -476,6 +476,12 @@ public class Candidato {
 		} else {
 			return 0;
 		}
+	}
+
+
+	@Override
+	public String toString() {
+		return nome + "	" + pontuacao;
 	}
 	
 
