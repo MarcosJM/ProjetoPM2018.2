@@ -47,7 +47,7 @@ public class ArquivoCsv {
 	
 	
 	public String getElemento(String nomeColuna, int locLinha)
-	//Para um futuro próximo: padronizar os nomes loc, indice e posição pois se referem à mesma coisa
+	// Para um futuro proximo: padronizar os nomes loc, indice e posicao pois se referem a mesma coisa
 	{
 		if (locLinha < this.getQuantidadeLinhas())
 		{
@@ -110,10 +110,10 @@ public class ArquivoCsv {
 	
 	
 	/**
-	 * retorna o índice da linha de um elemento dado o próprio e o nome de sua coluna
+	 * retorna o indice da linha de um elemento dado o proprio e o nome de sua coluna
 	 * @param nomeColuna, String - nome da coluna desejada
-	 * @param elemento, String - elemento cujo índice deseja-se saber
-	 * @return int correspondente ao índice da linha do elemento, ou -1 se o índice não for encontrado.
+	 * @param elemento, String - elemento cujo indice deseja-se saber
+	 * @return int correspondente ao indice da linha do elemento, ou -1 se o indice nao for encontrado.
 	 */
 	public int getLinhaElemento(String nomeColuna, String elemento)
 	{
@@ -125,18 +125,18 @@ public class ArquivoCsv {
 			{
 				if (this.dadosCsv.get(iterator)[posicaoColuna].equals(elemento))
 				{
-					//essa forma de retorno leva em conta que cada elemento na tabela é único.
+					//essa forma de retorno leva em conta que cada elemento na tabela eh unico.
 					return iterator;
 				}
 			}
-			//faltando: mensagem para informar quando o elemento não foi encontrado.
+			//faltando: mensagem para informar quando o elemento nao foi encontrado.
 		}
 		return -1;
 	}
 	
 	/**
 	 * retorna todos os elementos de uma linha
-	 * @param indiceLinha, int - índice da linha da qual deseja-se obter os elementos
+	 * @param indiceLinha, int - indice da linha da qual deseja-se obter os elementos
 	 * @return Array de Strings com os elementos da linha, ou um array vazio se a linha for inexistente
 	 */
 	public String[] getElementosLinha(int indiceLinha)
@@ -151,7 +151,7 @@ public class ArquivoCsv {
 			}
 			return elementosLinha;
 		}else {
-			System.err.println("Linha não existente.");
+			System.err.println("Linha nao existente.");
 			return Constantes.ARRAY_VAZIO;
 		}
 		
