@@ -30,7 +30,7 @@ public class ComissaoBolsasController {
 	 * @param caminhoXml - String que indica o caminho ate o arquivo, deve conter a extensao .xml
 	 * @param numeroSemestreSemReprovacao - String, numero de semestres sem reprovar na pos-graduacao.
 	 */
-	public void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
+	public static void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
 		Candidato candidato = new Candidato(caminhoXml);
 		
 		if (numeroSemestreSemReprovacao.equals("") || numeroSemestreSemReprovacao == null) {
@@ -49,7 +49,7 @@ public class ComissaoBolsasController {
 	 * Comando: -pr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaPremios(boolean verboso) {
+	public static void geraSaidaPremios(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de premios	Pontuacao de premios");
 		
 		for (Candidato candidato : candidatos) {
@@ -81,7 +81,7 @@ public class ComissaoBolsasController {
 	 * Comando: -ar
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaArtigosQualisRestrito(boolean verboso) {
+	public static void geraSaidaArtigosQualisRestrito(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de artigos	Pontuacao de artigos");
 		
 		for (Candidato candidato : candidatos) {
@@ -112,7 +112,7 @@ public class ComissaoBolsasController {
 	 * Comando: -anr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaArtigosQualisCompleto(boolean verboso) {
+	public static void geraSaidaArtigosQualisCompleto(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de artigos	Pontuacao de artigos");
 		
 		for (Candidato candidato : candidatos) {
@@ -143,7 +143,7 @@ public class ComissaoBolsasController {
 	 * Comando: -pe
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaEventos(boolean verboso) {
+	public static void geraSaidaEventos(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de eventos	Pontuacao de eventos");
 		
 		for (Candidato candidato : candidatos) {
@@ -174,7 +174,7 @@ public class ComissaoBolsasController {
 	 * Comando: -vi
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	*/ 
-	public void geraSaidaVinculos(boolean verboso) {
+	public static void geraSaidaVinculos(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de vinculos	Pontuacao de vinculos");
 		
 		for (Candidato candidato : candidatos) {
@@ -207,7 +207,7 @@ public class ComissaoBolsasController {
 	 * @return String, candidatos, seus premios, artigos, eventos, vinculos 
 	 * e os pontos em cada categoria.
 	*/ 
-	public void geraSaidaSaidaCompleta(boolean verboso) {
+	public static void geraSaidaSaidaCompleta(boolean verboso) {
 		
 		geraSaidaPremios(verboso);
 		geraSaidaArtigosQualisRestrito(verboso);
@@ -223,7 +223,7 @@ public class ComissaoBolsasController {
 	 * Comando: -o <nome-caminho-arquivo-txt-saida>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public void defineCaminhoSaida(String caminhoTxt) {
+	public static void defineCaminhoSaida(String caminhoTxt) {
 		arquivoSaida = caminhoTxt;
 	}
 	
@@ -233,7 +233,7 @@ public class ComissaoBolsasController {
 	 * Comando: -l <nome-caminho-arquivo-log-errors>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public void defineCaminhoLogErro(String caminhoTxt) {
+	public static void defineCaminhoLogErro(String caminhoTxt) {
 		arquivoLog = caminhoTxt;
 	}
 	
@@ -241,7 +241,7 @@ public class ComissaoBolsasController {
 	/**
 	 * Ordena os candidatos disponiveis por sua pontuacao.
 	 */
-	public void ordenaCandidatos() {
+	public static void ordenaCandidatos() {
 		
 		Collections.sort(
 			candidatos, 
@@ -257,7 +257,7 @@ public class ComissaoBolsasController {
 	 * Gera a saida com todos os candidatos lidos e sua pontuacao.
 	 * @return String, candidatos e sua pontuacao completa.
 	 */
-	public void geraSaidaRanking() {
+	public static void geraSaidaRanking() {
 		StringBuilder conteudo = new StringBuilder("");
 		ordenaCandidatos();
 		for (Candidato candidato : candidatos) {
@@ -272,7 +272,7 @@ public class ComissaoBolsasController {
 	/**
 	 * Finaliza o programa escrevendo nos arquivos de saida e log de erros.  
 	 */
-	public void finalizaPrograma() {
+	public static void finalizaPrograma() {
 		// Escreve o ranking final dos candidatos:
 		geraSaidaRanking();
 		
