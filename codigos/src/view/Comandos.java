@@ -23,18 +23,15 @@ import java.util.List;
  * 10) -vi : gera a saída referente à existência de vínculo com a UNIRIO.
  * 
  * A biblioteca picocli assume qualquer ordem de comandos. Assim tambem como aceita concatenacoes (e.g. -c -f, -cf).
- * 
- * @author Mariana
+ *
  *
  */
 
 public class Comandos {
 	
-	@Option(names = "-a", description = "Indica os dados do candidato a ser considerado e o caminho do arquivo XML.", required = true)
-	private String caminhoEntrada;
-	
-	@Parameters(description = "Podem ser passados varios parametros para o comando -a quanto aos dados a serem considerados.")
-	List<String> dadosConsiderados;
+	//"Arity" descreve que serao obrigatorios dois argumentos para esse comando
+	@Option(names = "-a", arity = "2", description = "Indica o dado do candidato a ser considerado (nº de semestres sem reprovacao) e o caminho do arquivo XML.", required = true)
+	private String[] DadosECaminhosXML;
 	
 	@Option(names = "-o", description = "Caminho do arquivo texto que contem a saida do programa.", required = true)
 	private String caminhoSaida;
@@ -43,7 +40,7 @@ public class Comandos {
 	private String caminhoLog;
 	
 	@Option(names = "-v", description = "Modo detalhado. Descricao completa da execucao do codigo.")
-	private boolean verbose;
+	private boolean verboso;
 	
 	@Option(names = "-c", description = "Gera a saida completa do programa.")
 	private boolean completo;
@@ -68,12 +65,8 @@ public class Comandos {
 	 *  Abaixo, metodos para retornar as variaveis associadas a cada opcao.
 	 */
 	
-	public String getCaminhoEntrada() {
-		return caminhoEntrada;
-	}
-	
-	public List<String> getDadosConsiderados() {
-		return dadosConsiderados;
+	public String[] getDadosECaminhosXML() {
+		return DadosECaminhosXML;
 	}
 	
 	public String getCaminhoSaida() {
@@ -84,8 +77,8 @@ public class Comandos {
 		return caminhoLog;
 	}
 	
-	public boolean isVerbose() {
-		return verbose;
+	public boolean isVerboso() {
+		return verboso;
 	}
 	
 	public boolean isCompleto() {

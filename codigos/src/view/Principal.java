@@ -1,10 +1,7 @@
 package view;
 
-import utils.XmlUtils;
 import utils.CommandLine;
-
-import static java.lang.System.out;
-
+import controller.ComissaoBolsasController;
 import java.util.Scanner;
 
 /**
@@ -21,7 +18,7 @@ public class Principal {
 	 * @param entrada
 	 * @return argumentos
 	 */
-	public String[] decompoeEntrada(String entrada) {
+	public static String[] decompoeEntrada(String entrada) {
 		String[] argumentos = entrada.split(" ");
 		return argumentos;
 	}
@@ -37,30 +34,69 @@ public class Principal {
 	 * 4) -v : modo verbose, exibe a execucao do programa.
 	 * 5) -c : conteudo da saida do programa eh completo.
 	 * 6) -pr : para cada candidato, deve ser exibida a quantidade de prêmios considerados e a pontuação obtida.
-	 * 7) -ar : para cada candidato, deve ser exibida a quantidade de artigos considerados e a pontuação obtida,
+	 * 7) -ar : para cada candidato, deve ser exibida a quantidade de artigos no Qualis Restrito considerados e a pontuação obtida,
 	 * 		Se o modo verbose ativado, deve ser exibida ao final, para cada candidato: o ano de publicação, nome do artigo, conferência ou periódico associado e o Qualis associado.
-	 * 8) -anr : para cada candidato, deve ser exibida a quantidade de artigos considerados e a pontuação obtida,
+	 * 8) -anr : para cada candidato, deve ser exibida a quantidade de artigos fora do Qualis Restrito considerados e a pontuação obtida,
 	 * 		Se o modo verboso estiver ativado, deve ser exibida ao final, para cada candidato: o ano de publicação, nome do artigo, conferência ou periódico associado e o Qualis associado.
-	 * 9) -pe : para cada candidato, deve ser exibida a quantidade de participações consideradas e a pontuação obtida.
+	 * 9) -pe : para cada candidato, deve ser exibida a quantidade de participações em eventos classificados consideradas e a pontuação obtida.
 	 * 		Se o modo verboso estiver ativado, deve ser exibida ao final, para cada candidato: o ano, conferência e o Qualis associado.
-	 * 10) -vi : para cada candidato, deve ser exibida a quantidade de vínculos considerados e a pontuação obtida.
+	 * 10) -vi : para cada candidato, deve ser exibida a quantidade de vínculos com a Unirio considerados e a pontuação obtida.
 	 * 		Se o modo verboso estiver ativado, deve ser exibida ao final, para cada candidato: o ano, vínculo associado.
 	 * 
 	 * @param argumentos
 	 * 
 	 */
-	public void executaComando(String[] argumentos) {
+	
+	public static void executaComandos(String[] argumentos) {
 		Comandos comandos = new Comandos();
 		
-		Comandos executar = CommandLine.populateCommand(comandos, argumentos);
+		try {
+			comandos = CommandLine.populateCommand(comandos, argumentos); //Metodo populateCommand, da biblioteca picocli, ira popular o comando instanciado com as opcoes e suas variaveis
+			String[] dadosECaminhosXML = comandos.getDadosECaminhosXML();
+			boolean verboso = comandos.isVerboso();
+
+			//Percorre o vetor de dadosECaminhosXML passo 2, pois este vetor esta estruturado como: [caminho XML1, dado1, caminho XML2, dado2, ...]
+			
+			for(int i = 0; i < dadosECaminhosXML.length; i += 2) {
+				ComissaoBolsasController.novoCandidato(dadosECaminhosXML[i], dadosECaminhosXML[i+1]);
+			}
+			
+			//Gera a saida do sistema de acordo com os parametros passados
+
+			if (comandos.isCompleto()) {
+				ComissaoBolsasController.geraSaidaSaidaCompleta(verboso);
+			} else {
+				if (comandos.isPremios()) {
+					ComissaoBolsasController.geraSaidaPremios(verboso);
+				}
+				if (comandos.isArtigosNoQualisRestrito()) {
+					ComissaoBolsasController.geraSaidaArtigosQualisRestrito(verboso);
+				}
+				if (comandos.isArtigosForaQualisRestrito()) {
+					ComissaoBolsasController.geraSaidaArtigosQualisCompleto(verboso);
+				}
+				if (comandos.isEventosClassificados()) {
+					ComissaoBolsasController.geraSaidaEventos(verboso);
+				}
+				if (comandos.isVinculoUnirio()) {
+					ComissaoBolsasController.geraSaidaVinculos(verboso);
+				}
+			}
+						
+		} catch(Exception e) {
+			System.out.print(e.getMessage());
+		}
 	}
 	
 	public static void main(String[] args) {
 		
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("$ ");
-		String entrada = scanner.next();
+		String entrada = scanner.nextLine();
+		String[] argumentos = decompoeEntrada(entrada);
+		scanner.close();
 		
-	}
+		executaComandos(argumentos);
 
+	}
 }

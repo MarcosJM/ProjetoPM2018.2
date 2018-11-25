@@ -1,3 +1,15 @@
+/**
+ * Codigo fonte da biblioteca Picocli, a fim de evitar o uso desta biblioteca como dependência externa (Todo o código-fonte reside neste único arquivo).
+ * 
+ * Picocli consistem em um framework de arquivo unico para aplicacoes Java de linha de comando com codigo bem reduzido.
+ * 
+ * Como funciona: Anote uma classe com os varios tipos de anotacoes possiveis (sera usada a anotacao Option), 
+ * e o picocli a inicializa a partir dos argumentos da linha de comando, convertendo a entrada (de cada comando passado) nos campos da sua classe.
+ * 
+ * Fonte: https://github.com/remkop/picocli
+ * 
+ */
+
 /*
    Copyright 2017 Remko Popma
 
