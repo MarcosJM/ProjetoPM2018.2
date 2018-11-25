@@ -51,18 +51,19 @@ public class Principal {
 		Comandos comandos = new Comandos();
 		
 		try {
-			comandos = CommandLine.populateCommand(comandos, argumentos); //Metodo populateCommand, da biblioteca picocli, ira popular o comando instanciado com as opcoes e suas variaveis
-			String[] dadosECaminhosXML = comandos.getDadosECaminhosXML();
-			boolean verboso = comandos.isVerboso();
-
-			//Percorre o vetor de dadosECaminhosXML passo 2, pois este vetor esta estruturado como: [caminho XML1, dado1, caminho XML2, dado2, ...]
+			comandos = CommandLine.populateCommand(comandos, argumentos); //Metodo populateCommand, da biblioteca picocli, ira popular o comando instanciado com as opcoes e suas variaveis passadas
 			
+			String[] dadosECaminhosXML = comandos.getDadosECaminhosXML();
+			ComissaoBolsasController.defineCaminhoSaida(comandos.getCaminhoSaida());
+			if(comandos.getCaminhoLog() != null) { ComissaoBolsasController.defineCaminhoLogErro(comandos.getCaminhoLog()); } //Associa o caminho do log de erros apenas se o comando foi utilizado
+			boolean verboso = comandos.isVerboso();
+			
+			//Percorre o vetor de dadosECaminhosXML passo 2, pois este vetor esta estruturado como: [caminho XML1, dado1, caminho XML2, dado2, ...]
 			for(int i = 0; i < dadosECaminhosXML.length; i += 2) {
 				ComissaoBolsasController.novoCandidato(dadosECaminhosXML[i], dadosECaminhosXML[i+1]);
 			}
 			
 			//Gera a saida do sistema de acordo com os parametros passados
-
 			if (comandos.isCompleto()) {
 				ComissaoBolsasController.geraSaidaSaidaCompleta(verboso);
 			} else {
@@ -82,11 +83,19 @@ public class Principal {
 					ComissaoBolsasController.geraSaidaVinculos(verboso);
 				}
 			}
+			
+			//Finaliza o programa, associando o ranking final dos candidatos ao arquivo de saida
+			ComissaoBolsasController.finalizaPrograma();
 						
 		} catch(Exception e) {
 			System.out.print(e.getMessage());
 		}
 	}
+	
+	/**
+	 * Ponto de entrada na aplicação.
+	 * @param args
+	 */
 	
 	public static void main(String[] args) {
 		
