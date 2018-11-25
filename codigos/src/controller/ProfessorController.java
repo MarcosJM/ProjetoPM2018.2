@@ -7,11 +7,11 @@ public class ProfessorController {
 	
 	public ProfessorController()
 	{
-		this.professoresPPGI = new ArquivoCsv("../../../arquivos/dados/professores_bsi_ppgi.csv", ",");
+		this.professoresPPGI = new ArquivoCsv("../arquivos/dados/professores_bsi_ppgi.csv", ",");
 	} 
 	public boolean ehProfessorUnirio(String professor)
 	{
-		String[] professores = professoresPPGI.getElementosColuna("Nome Professor");
+		String[] professores = professoresPPGI.getElementosColuna("Nome professor");
 		int quantidadeProfessores = professores.length;
 		for (int iterator = 0; iterator < quantidadeProfessores; iterator ++)
 		{

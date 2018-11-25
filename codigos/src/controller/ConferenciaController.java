@@ -8,7 +8,7 @@ public class ConferenciaController implements ClassificacaoInterface{
 	
 	public ConferenciaController()
 	{
-		this.conferencias = new ArquivoCsv("../../../arquivos/dados/qualis_conferencia.csv", ",");
+		this.conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ",");
 
 	}
 	
