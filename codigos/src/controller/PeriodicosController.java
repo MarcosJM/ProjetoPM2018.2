@@ -2,27 +2,39 @@ package controller;
 
 import model.ArquivoCsv;
 
-public class PeriodicosController implements ClassificacaoInterface{
+public class PeriodicosController {
 
-	private ArquivoCsv periodicos;
+	private static ArquivoCsv periodicos = new ArquivoCsv("../../../arquivos/dados/qualis_periodicos.csv", ",");;
 	
-	public PeriodicosController()
+	
+	/**
+	 * Encontra o qualis de um periodico por seu titulo.
+	 * @param titulo - String, titulo do periodico que se deseja procurar.
+	 * @return String, o qualis do periodico.
+	 */
+	public static String getClassificacaoCapesPorTitulo(String titulo) 
 	{
-		this.periodicos = new ArquivoCsv("../../../arquivos/dados/qualis_conferencia.csv", ",");
-
-	}
-	@Override
-	public String getClassificacaoCapes(String ISSNPeriodico) 
-	{
-		// primeiro, pegar o indice do elemento siglaConferencia
-		int indiceLinha = periodicos.getLinhaElemento("ISSN", ISSNPeriodico);
-		// depois de checar se essa sigla foi encontrada, pegar o elemento da coluna QUALIS, que esta na mesma linha
-		if (indiceLinha != -1)
-		{
-			return periodicos.getElemento("QUALIS", indiceLinha);
-			
-		}
-		return "";
+		// Primeiro, pega o indice do elemento.
+		int indiceLinha = periodicos.getLinhaElemento("Titulo", titulo);
 		
+		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
+		if (indiceLinha != -1)
+			return periodicos.getElemento("QUALIS", indiceLinha);
+		return "";
 	}
+	
+	
+	/**
+	 * Encontra o qualis de um periodico por seu ISSN.
+	 * @param issn - String, ISSN do periodico que se deseja procurar.
+	 * @return String, o qualis do periodico.
+	 */
+	public static String getClassificacaoCapesPorISSN(String issn) 
+	{
+		int indiceLinha = periodicos.getLinhaElemento("ISSN", issn);
+		if (indiceLinha != -1)
+			return periodicos.getElemento("QUALIS", indiceLinha);
+		return "";	
+	}
+	
 }

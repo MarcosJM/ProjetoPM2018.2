@@ -2,26 +2,38 @@ package controller;
 
 import model.ArquivoCsv;
 
-public class ConferenciaController implements ClassificacaoInterface{
+public class ConferenciaController {
 
-	private ArquivoCsv conferencias;
+	private static ArquivoCsv conferencias = new ArquivoCsv("../../../arquivos/dados/qualis_conferencia.csv", ",");;
 	
-	public ConferenciaController()
+	/**
+	 * Encontra o qualis de uma conferencia por sua sigla.
+	 * @param sigla - String, sigla da conferencia que se deseja procurar.
+	 * @return String, o qualis da conferencia.
+	 */
+	public static String getClassificacaoCapesPorSigla(String sigla) 
 	{
-		this.conferencias = new ArquivoCsv("../../../arquivos/dados/qualis_conferencia.csv", ",");
-
+		// Primeiro, pega o indice do elemento.
+		int indiceLinha = conferencias.getLinhaElemento("SIGLA", sigla);
+		
+		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
+		if (indiceLinha != -1)
+			return conferencias.getElemento("QUALIS", indiceLinha);
+		return "";
 	}
 	
-	@Override
-	public String getClassificacaoCapes(String siglaConferencia) {
-		// primeiro, pegar o indice do elemento siglaConferencia
-		int indiceLinha = conferencias.getLinhaElemento("SIGLA", siglaConferencia);
-		// depois de checar se essa sigla foi encontrada, pegar o elemento da coluna QUALIS, que esta na mesma linha
+	/**
+	 * Encontra o qualis de uma conferencia por seu nome.
+	 * @param nome - String, nome da conferencia que se deseja procurar.
+	 * @return String, o qualis da conferencia.
+	 */
+	public static String getClassificacaoCapesPorNome(String nome) {
+		// Primeiro, pega o indice do elemento.
+		int indiceLinha = conferencias.getLinhaElemento("NOME DA CONFERENCIA", nome);
+		
+		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
 		if (indiceLinha != -1)
-		{
 			return conferencias.getElemento("QUALIS", indiceLinha);
-			
-		}
 		return "";
 		
 	}

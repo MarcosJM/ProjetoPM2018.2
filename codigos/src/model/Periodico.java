@@ -1,5 +1,8 @@
 package model;
 
+import controller.ConferenciaController;
+import controller.PeriodicosController;
+
 public class Periodico {
 	
 	public String nome;
@@ -9,6 +12,16 @@ public class Periodico {
 	public Periodico(String issn, String nome) {
 		this.nome = nome;
 		this.issn = issn;
+	}
+	
+	// Define o qualis do periodico. Nulo se nao for encontrado.
+	public void setQualis() {
+		String qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);
+		if (qualisSt.equals("")) {
+			qualis = null;
+		} else {
+			qualis = QualisEnum.valueOf(qualisSt);
+		}
 	}
 	
 	public QualisEnum getQualis() {
