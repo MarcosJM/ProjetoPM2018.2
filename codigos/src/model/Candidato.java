@@ -36,7 +36,7 @@ public class Candidato {
 	private int pontuacao = 0;
 		
 	
-	public Candidato(String xmlPath) {
+	public Candidato(String xmlPath, int numeroSemestreSemReprovacao) {
 		try {
 			lattes = XmlUtils.lerXml(xmlPath, "CURRICULO-VITAE");
 			setNome();
@@ -48,6 +48,7 @@ public class Candidato {
 			setProjetosPesquisa();
 			
 			setVinculoInstituicao();
+			this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
 			setPontuacao();
 			
 		} catch (Exception e) {
@@ -55,16 +56,7 @@ public class Candidato {
 		}
 	}
 	
-	
-	public int getNumeroSemestreSemReprovacao() {
-		return numeroSemestreSemReprovacao;
-	}
-
-
-	public void setNumeroSemestreSemReprovacao(int numeroSemestreSemReprovacao) {
-		this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
-	}
-	
+		
 	
 	private void setNome() {
 		nome = XmlUtils.getValorAtributo(lattes, "DADOS-GERAIS", "NOME-COMPLETO");
@@ -109,7 +101,7 @@ public class Candidato {
 	 */
 	private void adicionarArtigosPeriodicos() {
 		
-		NodeList nos = XmlUtils.getNos(lattes, "ARTIGOS-PUBLICADOS");
+		NodeList nos = XmlUtils.getNos(lattes, "ARTIGO-PUBLICADO");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			Node no = nos.item(contador);
 			
@@ -121,7 +113,6 @@ public class Candidato {
 				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-ARTIGO");
 				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-ARTIGO");
 				
-				// Dados do periodico:
 				Node detalhes = dadosBasicos.getNextSibling();
 				String nomePeriodico = XmlUtils.getValorAtributo(detalhes, "TITULO-DO-PERIODICO-OU-REVISTA");
 				String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
@@ -145,7 +136,7 @@ public class Candidato {
 	 * Adiciona artigos publicados em conferencias ao ArrayList<Artigo> artigos.
 	 */
 	private void adicionarArtigosConferencias() {
-		NodeList nos = XmlUtils.getNos(lattes, "TRABALHOS-EM-EVENTOS");
+		NodeList nos = XmlUtils.getNos(lattes, "TRABALHO-EM-EVENTOS");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			Node no = nos.item(contador);
 			
@@ -301,7 +292,7 @@ public class Candidato {
 				String titulo = no.getNodeName();
 				
 				if (dataFormacao == null || dataFormacao == "") {
-					dataFormacao = "0";
+					dataFormacao = String.valueOf(Constantes.SEM_ANO);
 				}
 				
 				int ano = Integer.parseInt(dataFormacao);
@@ -330,8 +321,8 @@ public class Candidato {
 			String localAtuacao = XmlUtils.getValorAtributo(no.getParentNode(), "NOME-INSTITUICAO");
 			
 			String descricaoVinculo = 
-					XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO") + ";" +
-					XmlUtils.getValorAtributo(no, "OUTRO-VINCULO-INFORMADO") + ";" +
+					XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO") + " - " +
+					XmlUtils.getValorAtributo(no, "OUTRO-VINCULO-INFORMADO") + " - " +
 					XmlUtils.getValorAtributo(no, "OUTRO-ENQUADRAMENTO-FUNCIONAL-INFORMADO");
 			
 			
@@ -381,7 +372,7 @@ public class Candidato {
 		// Atuacao profissional:
 		for (AtuacaoProfissional atuacao : atuacoesProfissionais) {
 			if (atuacao.getLocalAtuacao().contains("Universidade Federal do Estado do Rio de Janeiro")) {
-				vinculos.add(new Vinculo(atuacao.getAnoFim(), atuacao.getDescricaoVinculo(), "Formacao academica"));
+				vinculos.add(new Vinculo(atuacao.getAnoFim(), atuacao.getDescricaoVinculo(), "Atuacao profissional"));
 			}
 		}
 		

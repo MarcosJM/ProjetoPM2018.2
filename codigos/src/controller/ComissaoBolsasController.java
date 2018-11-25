@@ -30,14 +30,12 @@ public class ComissaoBolsasController {
 	 * @param caminhoXml - String que indica o caminho ate o arquivo, deve conter a extensao .xml
 	 * @param numeroSemestreSemReprovacao - String, numero de semestres sem reprovar na pos-graduacao.
 	 */
-	public void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
-		Candidato candidato = new Candidato(caminhoXml);
+	public static void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
 		
 		if (numeroSemestreSemReprovacao.equals("") || numeroSemestreSemReprovacao == null) {
 			numeroSemestreSemReprovacao = "0";
 		}
-		
-		candidato.setNumeroSemestreSemReprovacao(Integer.parseInt(numeroSemestreSemReprovacao));
+		Candidato candidato = new Candidato(caminhoXml, Integer.parseInt(numeroSemestreSemReprovacao));
 		
 		// Candidato com o lattes e outros parametros lidos:
 		candidatos.add(candidato);
@@ -49,24 +47,25 @@ public class ComissaoBolsasController {
 	 * Comando: -pr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaPremios(boolean verboso) {
-		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de premios	Pontuacao de premios");
+	public static void geraSaidaPremios(boolean verboso) {
+		StringBuilder conteudo = new StringBuilder("Quantidade de premios\t\tPontuacao de premios\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato.getNome() + "	");
-			conteudo.append(candidato.getPremios().size() + "	");
-			conteudo.append(candidato.getPontuacaoPremios());
+			conteudo.append(candidato.getPremios().size() + "\t\t\t\t");
+			conteudo.append(candidato.getPontuacaoPremios() + "\t\t\t\t");
+			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getPremios().size() > 0) {
 				// Exibe a lista de premios.
-				conteudo.append("\r\nAno	Nome");
+				conteudo.append("\r\n\tAno\tNome\r\n");
 				for (Premio premio : candidato.getPremios()) {
-					conteudo.append(premio);
+					conteudo.append("\t" + premio);
 					conteudo.append("\r\n");
 				}
 			}
 			conteudo.append("\r\n");
 		}
+		conteudo.append("\r\n");
 		
 		// Candidatos, sua pontuacao e os premios, opcionalmente.
 		conteudoSaida.append(conteudo.toString());
@@ -81,24 +80,25 @@ public class ComissaoBolsasController {
 	 * Comando: -ar
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaArtigosQualisRestrito(boolean verboso) {
-		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de artigos	Pontuacao de artigos");
+	public static void geraSaidaArtigosQualisRestrito(boolean verboso) {
+		StringBuilder conteudo = new StringBuilder("Quantidade de artigos\t\tPontuacao de artigos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato.getNome() + "	");
-			conteudo.append(candidato.getArtigosCompletosQualisRestrito().size() + "	");
-			conteudo.append(candidato.getPontuacaoQualisRestrito());
+			conteudo.append(candidato.getArtigosCompletosQualisRestrito().size() + "\t\t\t\t");
+			conteudo.append(candidato.getPontuacaoQualisRestrito() + "\t\t\t\t");
+			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getArtigosCompletosQualisRestrito().size() > 0) {
 				// Exibe detalhes sobre os artigos.
-				conteudo.append("\r\nAno	Nome	Origem	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tNome e origem\r\n");
 				for (Artigo artigo : candidato.getArtigosCompletosQualisRestrito()) {
-					conteudo.append(artigo);
+					conteudo.append("\t" + artigo);
 					conteudo.append("\r\n");
 				}
 			}
 			conteudo.append("\r\n");
 		}
+		conteudo.append("\r\n");
 		
 		// Candidatos, sua pontuacao e os artigos, opcionalmente.
 		conteudoSaida.append(conteudo.toString());
@@ -112,24 +112,25 @@ public class ComissaoBolsasController {
 	 * Comando: -anr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaArtigosQualisCompleto(boolean verboso) {
-		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de artigos	Pontuacao de artigos");
+	public static void geraSaidaArtigosQualisCompleto(boolean verboso) {
+		StringBuilder conteudo = new StringBuilder("Quantidade de artigos\t\tPontuacao de artigos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato.getNome() + "	");
-			conteudo.append(candidato.getArtigosCompletosQualisCompleto().size() + "	");
-			conteudo.append(candidato.getPontuacaoQualisCompleto());
+			conteudo.append(candidato.getArtigosCompletosQualisCompleto().size() + "\t\t\t\t");
+			conteudo.append(candidato.getPontuacaoQualisCompleto() + "\t\t\t\t");
+			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getArtigosCompletosQualisCompleto().size() > 0) {
 				// Exibe detalhes sobre os artigos.
-				conteudo.append("\r\nAno	Nome	Origem	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tNome e origem\r\n");
 				for (Artigo artigo : candidato.getArtigosCompletosQualisCompleto()) {
-					conteudo.append(artigo);
+					conteudo.append("\t" + artigo);
 					conteudo.append("\r\n");
 				}
 			}
 			conteudo.append("\r\n");
 		}
+		conteudo.append("\r\n");
 		
 		// Candidatos, sua pontuacao e os artigos, opcionalmente.
 		conteudoSaida.append(conteudo.toString());
@@ -143,24 +144,25 @@ public class ComissaoBolsasController {
 	 * Comando: -pe
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public void geraSaidaEventos(boolean verboso) {
-		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de eventos	Pontuacao de eventos");
+	public static void geraSaidaEventos(boolean verboso) {
+		StringBuilder conteudo = new StringBuilder("Quantidade de eventos\t\tPontuacao de eventos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato.getNome() + "	");
-			conteudo.append(candidato.getEventos().size() + "	");
-			conteudo.append(candidato.getPontuacaoEventos());
+			conteudo.append(candidato.getEventos().size() + "\t\t\t\t");
+			conteudo.append(candidato.getPontuacaoEventos() + "\t\t\t\t");
+			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getEventos().size() > 0) {
 				// Exibe detalhes dos eventos.
-				conteudo.append("\r\nAno	Evento	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tEvento\r\n");
 				for (Evento evento : candidato.getEventos()) {
-					conteudo.append(evento);
+					conteudo.append("\t" + evento);
 					conteudo.append("\r\n");
 				}
 			}
 			conteudo.append("\r\n");
 		}
+		conteudo.append("\r\n");
 		
 		// Candidatos, sua pontuacao e os eventos, opcionalmente.
 		conteudoSaida.append(conteudo.toString());
@@ -174,24 +176,25 @@ public class ComissaoBolsasController {
 	 * Comando: -vi
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	*/ 
-	public void geraSaidaVinculos(boolean verboso) {
-		StringBuilder conteudo = new StringBuilder("Nome	Quantidade de vinculos	Pontuacao de vinculos");
+	public static void geraSaidaVinculos(boolean verboso) {
+		StringBuilder conteudo = new StringBuilder("Quantidade de vinculos\t\tPontuacao de vinculos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato.getNome() + "	");
-			conteudo.append(candidato.getVinculos().size() + "	");
-			conteudo.append(candidato.getPontuacaoVinculos());
+			conteudo.append(candidato.getVinculos().size() + "\t\t\t\t");
+			conteudo.append(candidato.getPontuacaoVinculos() + "\t\t\t\t");
+			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getVinculos().size() > 0) {
 				// Exibe detalhes dos vinculos.
-				conteudo.append("\r\nAno	Vinculo");
+				conteudo.append("\r\n\tAno\tVinculo\r\n");
 				for (Vinculo vinculo : candidato.getVinculos()) {
-					conteudo.append(vinculo);
+					conteudo.append("\t" + vinculo);
 					conteudo.append("\r\n");
 				}
 			}
 			conteudo.append("\r\n");
 		}
+		conteudo.append("\r\n");
 		
 		// Candidatos, sua pontuacao e os vinculos, opcionalmente.
 		conteudoSaida.append(conteudo.toString());
@@ -207,7 +210,7 @@ public class ComissaoBolsasController {
 	 * @return String, candidatos, seus premios, artigos, eventos, vinculos 
 	 * e os pontos em cada categoria.
 	*/ 
-	public void geraSaidaSaidaCompleta(boolean verboso) {
+	public static void geraSaidaSaidaCompleta(boolean verboso) {
 		
 		geraSaidaPremios(verboso);
 		geraSaidaArtigosQualisRestrito(verboso);
@@ -223,7 +226,7 @@ public class ComissaoBolsasController {
 	 * Comando: -o <nome-caminho-arquivo-txt-saida>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public void defineCaminhoSaida(String caminhoTxt) {
+	public static void defineCaminhoSaida(String caminhoTxt) {
 		arquivoSaida = caminhoTxt;
 	}
 	
@@ -233,7 +236,7 @@ public class ComissaoBolsasController {
 	 * Comando: -l <nome-caminho-arquivo-log-errors>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public void defineCaminhoLogErro(String caminhoTxt) {
+	public static void defineCaminhoLogErro(String caminhoTxt) {
 		arquivoLog = caminhoTxt;
 	}
 	
@@ -241,14 +244,12 @@ public class ComissaoBolsasController {
 	/**
 	 * Ordena os candidatos disponiveis por sua pontuacao.
 	 */
-	public void ordenaCandidatos() {
+	public static void ordenaCandidatos() {
 		
 		Collections.sort(
 			candidatos, 
 			(candidato1, candidato2) -> 
-				candidato1.getPontuacao() < candidato2.getPontuacao() ? -1 : 
-				candidato1.getPontuacao() == candidato2.getPontuacao() ? 0 : 
-				1
+				((Integer)candidato2.getPontuacao()).compareTo(candidato1.getPontuacao())
 		);
 	}
 	
@@ -257,11 +258,13 @@ public class ComissaoBolsasController {
 	 * Gera a saida com todos os candidatos lidos e sua pontuacao.
 	 * @return String, candidatos e sua pontuacao completa.
 	 */
-	public void geraSaidaRanking() {
-		StringBuilder conteudo = new StringBuilder("");
+	public static void geraSaidaRanking() {
+		StringBuilder conteudo = new StringBuilder("Pontos\t\tNome\r\n");
 		ordenaCandidatos();
+		
 		for (Candidato candidato : candidatos) {
-			conteudo.append(candidato);
+			conteudo.append(candidato.getPontuacao() + "\t\t");
+			conteudo.append(candidato.getNome());
 			conteudo.append("\r\n");
 		}
 
@@ -272,8 +275,9 @@ public class ComissaoBolsasController {
 	/**
 	 * Finaliza o programa escrevendo nos arquivos de saida e log de erros.  
 	 */
-	public void finalizaPrograma() {
+	public static void finalizaPrograma() {
 		// Escreve o ranking final dos candidatos:
+		conteudoSaida.append("\r\nRanking final\r\n");
 		geraSaidaRanking();
 		
 		try {

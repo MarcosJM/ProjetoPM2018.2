@@ -11,13 +11,13 @@ class CandidatoTest {
 
 	@Test
 	void testGetNome() {
-		Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml");
+		Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml", 8);
 		assertEquals("Vânia Maria Félix Dias", candidato.getNome());
 	}
 
 	@Test
 	void testGetQuantidadePremios() {
-		Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml");
+		Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml", 8);
 		assertEquals(1, candidato.getPremios().size());
 	}
 
