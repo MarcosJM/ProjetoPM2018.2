@@ -90,9 +90,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getArtigosCompletosQualisRestrito().size() > 0) {
 				// Exibe detalhes sobre os artigos.
-				conteudo.append("\r\nAno	Nome	Origem	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tNome e origem\r\n");
 				for (Artigo artigo : candidato.getArtigosCompletosQualisRestrito()) {
-					conteudo.append(artigo);
+					conteudo.append("\t" + artigo);
 					conteudo.append("\r\n");
 				}
 			}
@@ -122,9 +122,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getArtigosCompletosQualisCompleto().size() > 0) {
 				// Exibe detalhes sobre os artigos.
-				conteudo.append("\r\nAno	Nome	Origem	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tNome e origem\r\n");
 				for (Artigo artigo : candidato.getArtigosCompletosQualisCompleto()) {
-					conteudo.append(artigo);
+					conteudo.append("\t" + artigo);
 					conteudo.append("\r\n");
 				}
 			}

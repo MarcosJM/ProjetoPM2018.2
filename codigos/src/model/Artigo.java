@@ -29,14 +29,13 @@ public class Artigo {
 	@Override
 	public String toString() {
     	StringBuilder conteudo = new StringBuilder("");
-    	conteudo.append(anoPublicacao + "	" + titulo);
+    	conteudo.append(anoPublicacao + "	" + getQualis() + "	" + titulo);
     	
-    	if (conferencia == null) {
+    	if (periodico == null) {
     		conteudo.append("	Conferencia: " + conferencia.nome);
     	} else {
     		conteudo.append("	Periodico: " + periodico.nome);
     	}
-    	conteudo.append("	" + getQualis());
     	return conteudo.toString();
 	}
     
