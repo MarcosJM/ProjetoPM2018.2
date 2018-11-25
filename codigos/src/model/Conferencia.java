@@ -9,10 +9,11 @@ public class Conferencia {
 
 	public Conferencia(String nome) {
 		this.nome = nome;
+		setQualis();
 	}
 
 	// Define o qualis da conferencia. Nulo se nao for encontrado.
-	public void setQualis() {
+	private void setQualis() {
 		String qualisSt = ConferenciaController.getClassificacaoCapesPorNome(nome);
 		if (qualisSt.equals("")) {
 			qualis = null;
