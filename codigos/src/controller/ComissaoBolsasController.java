@@ -59,9 +59,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getPremios().size() > 0) {
 				// Exibe a lista de premios.
-				conteudo.append("\r\nAno	Nome");
+				conteudo.append("\r\n\tAno\tNome\r\n");
 				for (Premio premio : candidato.getPremios()) {
-					conteudo.append(premio);
+					conteudo.append("\t" + premio);
 					conteudo.append("\r\n");
 				}
 			}
@@ -156,9 +156,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getEventos().size() > 0) {
 				// Exibe detalhes dos eventos.
-				conteudo.append("\r\nAno	Evento	Qualis");
+				conteudo.append("\r\n\tAno\tQualis\tEvento\r\n");
 				for (Evento evento : candidato.getEventos()) {
-					conteudo.append(evento);
+					conteudo.append("\t" + evento);
 					conteudo.append("\r\n");
 				}
 			}
@@ -188,9 +188,9 @@ public class ComissaoBolsasController {
 			
 			if (verboso && candidato.getVinculos().size() > 0) {
 				// Exibe detalhes dos vinculos.
-				conteudo.append("\r\nAno	Vinculo");
+				conteudo.append("\r\n\tAno\tVinculo\r\n");
 				for (Vinculo vinculo : candidato.getVinculos()) {
-					conteudo.append(vinculo);
+					conteudo.append("\t" + vinculo);
 					conteudo.append("\r\n");
 				}
 			}
@@ -251,9 +251,7 @@ public class ComissaoBolsasController {
 		Collections.sort(
 			candidatos, 
 			(candidato1, candidato2) -> 
-				candidato1.getPontuacao() < candidato2.getPontuacao() ? -1 : 
-				candidato1.getPontuacao() == candidato2.getPontuacao() ? 0 : 
-				1
+				((Integer)candidato2.getPontuacao()).compareTo(candidato1.getPontuacao())
 		);
 	}
 	

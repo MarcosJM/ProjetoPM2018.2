@@ -24,9 +24,9 @@ public class Vinculo {
 	public String toString() {
 		StringBuilder conteudo = new StringBuilder("");
 		if (anoFimVinculo == Constantes.SEM_ANO) {
-			conteudo.append("-	");
+			conteudo.append("-\t");
 		} else {
-			conteudo.append(anoFimVinculo);
+			conteudo.append(anoFimVinculo + "\t");
 		}
 		conteudo.append(tipo + ": " + nome);
 		

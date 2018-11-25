@@ -29,7 +29,7 @@ public class Evento {
 
 	@Override
 	public String toString() {
-		return ano + "	" + nome + "	" + qualis;
+		return ano + "	" + qualis + "	" + nome;
 	}
 
 }
