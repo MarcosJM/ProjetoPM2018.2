@@ -11,10 +11,11 @@ public class Evento {
 	public Evento(int ano, String nome) {
 		this.ano = ano;
 		this.nome = nome;
+		setQualis();
 	}
 	
 	// Define o qualis do evento. Nulo se nao for encontrado.
-	public void setQualis() {
+	private void setQualis() {
 		String qualisSt = ConferenciaController.getClassificacaoCapesPorNome(nome);
 		if (qualisSt.equals("")) {
 			qualis = null;
