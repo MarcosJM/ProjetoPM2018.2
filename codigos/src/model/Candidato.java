@@ -36,7 +36,7 @@ public class Candidato {
 	private int pontuacao = 0;
 		
 	
-	public Candidato(String xmlPath) {
+	public Candidato(String xmlPath, int numeroSemestreSemReprovacao) {
 		try {
 			lattes = XmlUtils.lerXml(xmlPath, "CURRICULO-VITAE");
 			setNome();
@@ -48,6 +48,7 @@ public class Candidato {
 			setProjetosPesquisa();
 			
 			setVinculoInstituicao();
+			this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
 			setPontuacao();
 			
 		} catch (Exception e) {
@@ -55,16 +56,7 @@ public class Candidato {
 		}
 	}
 	
-	
-	public int getNumeroSemestreSemReprovacao() {
-		return numeroSemestreSemReprovacao;
-	}
-
-
-	public void setNumeroSemestreSemReprovacao(int numeroSemestreSemReprovacao) {
-		this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
-	}
-	
+		
 	
 	private void setNome() {
 		nome = XmlUtils.getValorAtributo(lattes, "DADOS-GERAIS", "NOME-COMPLETO");
@@ -300,7 +292,7 @@ public class Candidato {
 				String titulo = no.getNodeName();
 				
 				if (dataFormacao == null || dataFormacao == "") {
-					dataFormacao = "0";
+					dataFormacao = String.valueOf(Constantes.SEM_ANO);
 				}
 				
 				int ano = Integer.parseInt(dataFormacao);

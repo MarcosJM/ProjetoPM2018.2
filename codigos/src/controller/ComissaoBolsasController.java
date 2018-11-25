@@ -31,13 +31,11 @@ public class ComissaoBolsasController {
 	 * @param numeroSemestreSemReprovacao - String, numero de semestres sem reprovar na pos-graduacao.
 	 */
 	public static void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
-		Candidato candidato = new Candidato(caminhoXml);
 		
 		if (numeroSemestreSemReprovacao.equals("") || numeroSemestreSemReprovacao == null) {
 			numeroSemestreSemReprovacao = "0";
 		}
-		
-		candidato.setNumeroSemestreSemReprovacao(Integer.parseInt(numeroSemestreSemReprovacao));
+		Candidato candidato = new Candidato(caminhoXml, Integer.parseInt(numeroSemestreSemReprovacao));
 		
 		// Candidato com o lattes e outros parametros lidos:
 		candidatos.add(candidato);
