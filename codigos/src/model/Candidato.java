@@ -9,36 +9,43 @@ import controller.ProfessorController;
 import utils.Constantes;
 import utils.XmlUtils;
 
+/**
+ * Classe que, a partir da leitura do lattes, calcula e guarda 
+ * as informacoes pertinentes para cada Candidato.
+ *
+ */
 public class Candidato {
 	
 	// Curriculo lattes carregado:
 	private Document lattes;
 	
 	private String nome;
-	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>();
+	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>(); // Todos os artigos.
 	
+	// Artigos separados por qualis.
 	private ArrayList<Artigo> artigosCompletosQualisRestrito = new ArrayList<Artigo>();
 	private ArrayList<Artigo> artigosCompletosQualisCompleto = new ArrayList<Artigo>();
 	
+	// Demais campos do lattes.
 	private ArrayList<Evento> eventos = new ArrayList<Evento>();
 	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
 	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
-	
 	private ArrayList<Vinculo> vinculos = new ArrayList<Vinculo>();
-	
 	private ArrayList<Premio> premios = new ArrayList<Premio>();
 	
-	private int numeroSemestreSemReprovacao;
+	private int numeroSemestreSemReprovacao; // Parametro de entrada no construtor.
 	private boolean possuiVinculoInstituicao = false; // Deve ser calculado atraves de outros campos do lattes.
 	
 	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
 	private int pontuacao = 0;
 		
-	
+	// Construtor. Le o lattes e o numero de semestre sem reprovacoes, 
+	// calculando os demais campos da classe. 
 	public Candidato(String xmlPath, int numeroSemestreSemReprovacao) {
 		try {
 			lattes = XmlUtils.lerXml(xmlPath, "CURRICULO-VITAE");
+			
 			setNome();
 			setPremios();
 			setArtigosCompletos();
@@ -46,8 +53,8 @@ public class Candidato {
 			setEventos();
 			setFormacoesAcademicas();
 			setProjetosPesquisa();
-			
 			setVinculoInstituicao();
+			
 			this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
 			setPontuacao();
 			
@@ -58,17 +65,20 @@ public class Candidato {
 	}
 	
 		
-	
+	// Getters e setters.
 	private void setNome() {
 		nome = XmlUtils.getValorAtributo(lattes, "DADOS-GERAIS", "NOME-COMPLETO");
 	}
+	
 	public String getNome() {
 		return nome;
 	}
 	
 	
-	// Numero de premios recebidos nos ultimos 10 anos.
-	// Itens na secao "PREMIOS-TITULOS" do lattes
+	/**
+	 * Numero de premios recebidos nos ultimos 10 anos.
+	 * Itens na secao "PREMIOS-TITULOS" do lattes.
+	 */
 	public void setPremios() {
 		NodeList nos = XmlUtils.getNos(lattes, "PREMIO-TITULO");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
@@ -85,12 +95,9 @@ public class Candidato {
 			
 			if (ano >= Constantes.ANO_LIMITE) {
 				premios.add(new Premio(ano, nome));
-			}
-			
-		}
-		
+			}	
+		}	
 	}
-	
 	
 	public ArrayList<Premio> getPremios() {
 		return premios;
@@ -110,10 +117,11 @@ public class Candidato {
 			String natureza = XmlUtils.getValorAtributo(dadosBasicos, "NATUREZA");
 			
 			if (natureza.equals("COMPLETO")) {
-				// Dados do artigo:
+				// Dados do Artigo:
 				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-ARTIGO");
 				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-ARTIGO");
 				
+				// Dados do Periodico:
 				Node detalhes = dadosBasicos.getNextSibling();
 				String nomePeriodico = XmlUtils.getValorAtributo(detalhes, "TITULO-DO-PERIODICO-OU-REVISTA");
 				String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
@@ -125,10 +133,8 @@ public class Candidato {
 				}
 				if (ano >= Constantes.ANO_LIMITE) {
 					artigosCompletos.add(new Artigo(titulo, periodico, ano));
-				}
-				
+				}	
 			}
-			
 		}
 	}
 	
@@ -145,11 +151,11 @@ public class Candidato {
 			String natureza = XmlUtils.getValorAtributo(dadosBasicos, "NATUREZA");
 			
 			if (natureza.equals("COMPLETO")) {
-				// Dados do artigo:
+				// Dados do Artigo:
 				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-TRABALHO");
 				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-TRABALHO");
 				
-				// Dados da conferencia:
+				// Dados da Conferencia:
 				Node detalhes = dadosBasicos.getNextSibling();
 				String nomeEvento = XmlUtils.getValorAtributo(detalhes, "NOME-DO-EVENTO");
 				Conferencia conferencia = new Conferencia(nomeEvento);
@@ -169,13 +175,15 @@ public class Candidato {
 	
 	
 	/**
-	 * Captura todos os artigos do lattes e divide entre os que sao qualis restrito e qualis completo.
+	 * Captura todos os artigos do lattes e divide entre os 
+	 * que sao qualis restrito e qualis completo.
 	 */
 	private void setArtigosCompletos() {
 		adicionarArtigosPeriodicos();
 		adicionarArtigosConferencias();
 	
-		// Divide em qualis restrito e completo:
+		// Divide em qualis restrito e completo e
+		// separa nos ArrayLists especificos:
 		for (Artigo artigo : artigosCompletos) {
 			QualisEnum qualis = artigo.getQualis();
 			
@@ -192,7 +200,6 @@ public class Candidato {
 				artigosCompletosQualisCompleto.add(artigo);
 			}
 		}
-	
 	}
 	
 	public ArrayList<Artigo> getArtigosCompletosQualisRestrito() {
@@ -203,22 +210,18 @@ public class Candidato {
 		return artigosCompletosQualisCompleto;
 	}
 	
-	public ArrayList<Evento> getEventos() {
-		return eventos;
-	}
 	
-	public ArrayList<Vinculo> getVinculos() {
-		return vinculos;
-	}
-	
-	
-	// Funcao auxiliar para adicionar nos do XML lattes na lista de eventos do candidato.
+	/**
+	 * Funcao auxiliar para adicionar nos do XML lattes no ArrayList<Evento> do candidato.
+	 * @param nos - NodeList, nos contendo eventos de varios tipos.
+	 */
 	private void adicionarEventosListaEventos(NodeList nos) {
 		Node no;
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			no = nos.item(contador);
 			Node dadosBasicos = no.getPreviousSibling();
 			
+			// Qualquer tipo de Evento tem ano e nome.
 			String ano = XmlUtils.getValorAtributo(dadosBasicos, "ANO");
 			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO");
 			
@@ -233,18 +236,26 @@ public class Candidato {
 			if (qualis != null) {
 				eventos.add(evento);
 			}
-			
 		}
 	}
 
 	
-	// Pode ser um congresso, simposio, encontro ou outro.
+	
+	/**
+	 * Adiciona Eventos no ArrayList<Evento>, separando e adicionando
+	 * os Eventos por tipo: congresso, simposio, encontro ou outro.
+	 */
 	private void setEventos() {
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-SIMPOSIO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-CONGRESSO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-ENCONTRO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DE-OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS"));
 	}
+	
+	public ArrayList<Evento> getEventos() {
+		return eventos;
+	}
+	
 	
 	/**
 	 * Projetos dos ultimos 10 anos.
@@ -276,11 +287,10 @@ public class Candidato {
 			int ano = Integer.parseInt(anoVinculo);
 			if (ano >= Constantes.ANO_LIMITE) {
 				projetosPesquisa.add(new ProjetoPesquisa(ano, titulo, coordenadorProjeto));
-			}
-		
+			}	
 		}
-		
 	}
+	
 	
 	/**
 	 * Ano de formacao nos ultimos 10 anos.
@@ -305,12 +315,9 @@ public class Candidato {
 				int ano = Integer.parseInt(dataFormacao);
 				if (ano >= Constantes.ANO_LIMITE) {
 					formacoesAcademicas.add(new FormacaoAcademica(ano, nomeUniversidade, titulo));
-				}
-				
+				}			
 			}
-
 		}
-		
 	}
 	
 	
@@ -345,10 +352,8 @@ public class Candidato {
 			int anoFinal = Integer.parseInt(anoFim);
 			if (anoFinal >= Constantes.ANO_LIMITE) {
 				atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), anoFinal, localAtuacao, descricaoVinculo));
-			}
-			
+			}	
 		}	
-		
 	}
 	
 		
@@ -387,11 +392,17 @@ public class Candidato {
 		if (vinculos.size() > 0) {
 			possuiVinculoInstituicao = true;
 		}
-		
 	}
 	
-	
+	public ArrayList<Vinculo> getVinculos() {
+		return vinculos;
+	}
 
+	
+	/**
+	 * Metodo para calculo da pontuacao geral.
+	 * Usa metodos que calculam a pontuacao por categoria.
+	 */
 	private void setPontuacao() {
 		pontuacao = 0;
 		
@@ -410,7 +421,6 @@ public class Candidato {
 		
 		// Vinculos:
 		pontuacao += getPontuacaoVinculos();
-		
 	}
 
 	public int getPontuacao() {
@@ -482,5 +492,4 @@ public class Candidato {
 		return nome + "	" + pontuacao;
 	}
 	
-
 }
