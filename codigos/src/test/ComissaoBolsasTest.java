@@ -2,12 +2,13 @@ package test;
 
 import org.junit.jupiter.api.Test;
 
-import controller.ComissaoBolsasController;
-
+/**
+ * Classe de testes unitarios para ComissaoBolsasController.
+ */
 public class ComissaoBolsasTest {
 //	@Test
 //	void testExibePremios() {
-//		ComissaoBolsasController controladorComissaoBolsas= new ComissaoBolsasController();
+//		ComissaoBolsasController controladorComissaoBolsas = new ComissaoBolsasController();
 //		controladorComissaoBolsas.exibePremios(true);
 //	}
 }

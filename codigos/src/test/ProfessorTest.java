@@ -6,23 +6,25 @@ import org.junit.jupiter.api.Test;
 
 import controller.ProfessorController;
 
+/**
+ * Classe de testes unitarios para ProfessorController.
+ */
 public class ProfessorTest {
 	
-	//testa se a professora Vânia está no excel de professores da Unirio
 	@Test
+	/**
+	 * Testa se a professora Vania esta no excel de professores da UNIRIO.
+	 */
 	void testEhProfessorUnirioTrue() {
-		ProfessorController controladorProfessor= new ProfessorController();
-		assertEquals(true, controladorProfessor.ehProfessorUnirio("Vânia Maria Félix Dias"));
+		assertEquals(true, ProfessorController.ehProfessorUnirio("Vï¿½nia Maria Fï¿½lix Dias"));
 	}
 	
-	//testa se a professora batata está no excel de professores da Unirio
 	@Test
+	/**
+	 * Testa se a professora 'batata' esta no excel de professores da UNIRIO.
+	 */
 	void testEhProfessorUnirioFalse() {
-		ProfessorController controladorProfessor= new ProfessorController();
-		assertEquals(false, controladorProfessor.ehProfessorUnirio("batata"));
+		assertEquals(false, ProfessorController.ehProfessorUnirio("batata"));
 	}
-	
-	
-	
 
 }

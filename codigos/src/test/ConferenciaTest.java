@@ -5,20 +5,26 @@ import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import controller.ConferenciaController;
-import model.Conferencia;
-import model.QualisEnum;
 
+/**
+ * Classe de testes unitarios para ConferenciaController.
+ */
 public class ConferenciaTest {
+	
 	@Test
-	void testGetClassificacaoCapes() {
-		ConferenciaController controladorConferencia=new ConferenciaController();
-		assertEquals("A1",controladorConferencia.getClassificacaoCapes("AAAI"));
+	/**
+	 * Testa se uma sigla conhecida obtem o qualis correto.
+	 */
+	void testGetClassificacaoCapesPorSigla() {
+		assertEquals("A1", ConferenciaController.getClassificacaoCapesPorSigla("AAAI"));
 	}
 	
 	@Test
-	void testGetClassificacaoCapesErro() {
-		ConferenciaController controladorConferencia=new ConferenciaController();
-		assertEquals("",controladorConferencia.getClassificacaoCapes("-"));
+	/**
+	 * Testa se uma sigla desconhecida obtem um qualis vazio.
+	 */
+	void testGetClassificacaoCapesPorSiglaDesconhecida() {
+		assertEquals("", ConferenciaController.getClassificacaoCapesPorSigla("-"));
 	}	
 
 }
