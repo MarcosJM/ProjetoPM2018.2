@@ -24,4 +24,19 @@ public class Artigo {
     		return periodico.getQualis();
     	return conferencia.getQualis();
     }
+
+    
+	@Override
+	public String toString() {
+    	StringBuilder conteudo = new StringBuilder("");
+    	conteudo.append(anoPublicacao + "	" + getQualis() + "	" + titulo);
+    	
+    	if (periodico == null) {
+    		conteudo.append("	Conferencia: " + conferencia.nome);
+    	} else {
+    		conteudo.append("	Periodico: " + periodico.nome);
+    	}
+    	return conteudo.toString();
+	}
+    
 }

@@ -3,13 +3,9 @@ package controller;
 import model.ArquivoCsv;
 
 public class ProfessorController {
-	private ArquivoCsv professoresPPGI;
+	private static ArquivoCsv professoresPPGI = new ArquivoCsv("../arquivos/dados/professores_bsi_ppgi.csv", ",");;
 	
-	public ProfessorController()
-	{
-		this.professoresPPGI = new ArquivoCsv("../arquivos/dados/professores_bsi_ppgi.csv", ",");
-	} 
-	public boolean ehProfessorUnirio(String professor)
+	public static boolean ehProfessorUnirio(String professor)
 	{
 		String[] professores = professoresPPGI.getElementosColuna("Nome professor");
 		int quantidadeProfessores = professores.length;
@@ -17,7 +13,6 @@ public class ProfessorController {
 		{
 			if (professores[iterator].equals(professor))
 			{
-				
 				return true;
 			}
 		}

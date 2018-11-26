@@ -4,17 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-
 import model.Candidato;
 
-//
 class CandidatoTest {
 	Candidato candidato = new Candidato("..\\arquivos\\lattes\\0398675521406529.xml");
 
 	//Testes de get Candidato
 	@Test
 	void testGetNome() {
-		assertEquals("Vânia Maria Félix Dias", candidato.getNome());
+		assertEquals("VÃ¢nia Maria FÃ©lix Dias", candidato.getNome());
 	}
 
 	@Test

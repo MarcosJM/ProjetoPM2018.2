@@ -1,14 +1,36 @@
 package model;
 
+import controller.ConferenciaController;
+
 public class Evento {
 	
-	private String sigla;
 	private String nome;
-	private String edicao;
-	private QualisEnum qualis;
+	private int ano;
+	private QualisEnum qualis; // Obtido atraves de consulta ao site Qualis ou de outra forma.
 	
-	public Evento(String nome) {
+	public Evento(int ano, String nome) {
+		this.ano = ano;
 		this.nome = nome;
+		setQualis();
+	}
+	
+	// Define o qualis do evento. Nulo se nao for encontrado.
+	private void setQualis() {
+		String qualisSt = ConferenciaController.getClassificacaoCapesPorNome(nome);
+		if (qualisSt.equals("")) {
+			qualis = null;
+		} else {
+			qualis = QualisEnum.valueOf(qualisSt);
+		}
+	}
+	
+	public QualisEnum getQualis() {
+    	return qualis;
+    }
+
+	@Override
+	public String toString() {
+		return ano + "	" + qualis + "	" + nome;
 	}
 
 }

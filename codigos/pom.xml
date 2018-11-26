@@ -16,4 +16,13 @@
       </plugin>
     </plugins>
   </build>
+  
+  <dependencies>
+  	<dependency>
+    	<groupId>info.debatty</groupId>
+    	<artifactId>java-string-similarity</artifactId>
+   		<version>RELEASE</version>
+	</dependency>
+  </dependencies>
+  
 </project>

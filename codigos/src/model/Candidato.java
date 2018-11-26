@@ -1,12 +1,11 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import controller.ProfessorController;
 import utils.Constantes;
 import utils.XmlUtils;
 
@@ -16,7 +15,6 @@ public class Candidato {
 	private Document lattes;
 	
 	private String nome;
-	private int quantidadePremios;
 	private ArrayList<Artigo> artigosCompletos = new ArrayList<Artigo>();
 	
 	private ArrayList<Artigo> artigosCompletosQualisRestrito = new ArrayList<Artigo>();
@@ -26,15 +24,19 @@ public class Candidato {
 	private ArrayList<ProjetoPesquisa> projetosPesquisa = new ArrayList<ProjetoPesquisa>();
 	private ArrayList<FormacaoAcademica> formacoesAcademicas = new ArrayList<FormacaoAcademica>();
 	private ArrayList<AtuacaoProfissional> atuacoesProfissionais = new ArrayList<AtuacaoProfissional>();
+	
+	private ArrayList<Vinculo> vinculos = new ArrayList<Vinculo>();
+	
 	private ArrayList<Premio> premios = new ArrayList<Premio>();
 	
 	private int numeroSemestreSemReprovacao;
-	private boolean possuiVinculoInstituicao; // Deve ser calculado atraves de outros campos do lattes.
+	private boolean possuiVinculoInstituicao = false; // Deve ser calculado atraves de outros campos do lattes.
+	
 	// Pontuacao do candidato apos avaliacao da Comissao de Bolsas
 	private int pontuacao = 0;
 		
 	
-	public Candidato(String xmlPath) {
+	public Candidato(String xmlPath, int numeroSemestreSemReprovacao) {
 		try {
 			lattes = XmlUtils.lerXml(xmlPath, "CURRICULO-VITAE");
 			setNome();
@@ -44,21 +46,18 @@ public class Candidato {
 			setEventos();
 			setFormacoesAcademicas();
 			setProjetosPesquisa();
+			
+			setVinculoInstituicao();
+			this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
+			setPontuacao();
+			
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Erro na leitura do lattes.");
 		}
 	}
 	
-	
-	public int getNumeroSemestreSemReprovacao() {
-		return numeroSemestreSemReprovacao;
-	}
-
-
-	public void setNumeroSemestreSemReprovacao(int numeroSemestreSemReprovacao) {
-		this.numeroSemestreSemReprovacao = numeroSemestreSemReprovacao;
-	}
-	
+		
 	
 	private void setNome() {
 		nome = XmlUtils.getValorAtributo(lattes, "DADOS-GERAIS", "NOME-COMPLETO");
@@ -84,7 +83,7 @@ public class Candidato {
 				ano = Integer.parseInt(anoPremiacao);
 			}
 			
-			if (ano >= Constantes.DATA_LIMITE) {
+			if (ano >= Constantes.ANO_LIMITE) {
 				premios.add(new Premio(ano, nome));
 			}
 			
@@ -103,7 +102,7 @@ public class Candidato {
 	 */
 	private void adicionarArtigosPeriodicos() {
 		
-		NodeList nos = XmlUtils.getNos(lattes, "ARTIGOS-PUBLICADOS");
+		NodeList nos = XmlUtils.getNos(lattes, "ARTIGO-PUBLICADO");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			Node no = nos.item(contador);
 			
@@ -115,7 +114,6 @@ public class Candidato {
 				String anoPublicacao = XmlUtils.getValorAtributo(dadosBasicos, "ANO-DO-ARTIGO");
 				String titulo = XmlUtils.getValorAtributo(dadosBasicos, "TITULO-DO-ARTIGO");
 				
-				// Dados do periodico:
 				Node detalhes = dadosBasicos.getNextSibling();
 				String nomePeriodico = XmlUtils.getValorAtributo(detalhes, "TITULO-DO-PERIODICO-OU-REVISTA");
 				String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
@@ -125,7 +123,7 @@ public class Candidato {
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
-				if (ano >= Constantes.DATA_LIMITE) {
+				if (ano >= Constantes.ANO_LIMITE) {
 					artigosCompletos.add(new Artigo(titulo, periodico, ano));
 				}
 				
@@ -139,7 +137,7 @@ public class Candidato {
 	 * Adiciona artigos publicados em conferencias ao ArrayList<Artigo> artigos.
 	 */
 	private void adicionarArtigosConferencias() {
-		NodeList nos = XmlUtils.getNos(lattes, "TRABALHOS-EM-EVENTOS");
+		NodeList nos = XmlUtils.getNos(lattes, "TRABALHO-EM-EVENTOS");
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			Node no = nos.item(contador);
 			
@@ -160,7 +158,7 @@ public class Candidato {
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
-				if (ano >= Constantes.DATA_LIMITE) {
+				if (ano >= Constantes.ANO_LIMITE) {
 					artigosCompletos.add(new Artigo(titulo, conferencia, ano));
 				}
 				
@@ -205,26 +203,52 @@ public class Candidato {
 		return artigosCompletosQualisCompleto;
 	}
 	
+	public ArrayList<Evento> getEventos() {
+		return eventos;
+	}
+	
+	public ArrayList<Vinculo> getVinculos() {
+		return vinculos;
+	}
+	
+	
 	// Funcao auxiliar para adicionar nos do XML lattes na lista de eventos do candidato.
 	private void adicionarEventosListaEventos(NodeList nos) {
 		Node no;
 		for (int contador = 0; contador < nos.getLength(); contador++) {
 			no = nos.item(contador);
-			eventos.add(new Evento(XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO")));
+			Node dadosBasicos = no.getPreviousSibling();
+			
+			String ano = XmlUtils.getValorAtributo(dadosBasicos, "ANO");
+			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO");
+			
+			if (ano == null || ano == "") {
+				ano = "0";
+			}
+			
+			Evento evento = new Evento(Integer.parseInt(ano), nome);
+			QualisEnum qualis = evento.getQualis();
+			
+			// Tem classificacao de A1 a B5.
+			if (qualis != null) {
+				eventos.add(evento);
+			}
+			
 		}
 	}
-	
+
 	
 	// Pode ser um congresso, simposio, encontro ou outro.
 	private void setEventos() {
-		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DADOS-BASICOS-DA-PARTICIPACAO-EM-SIMPOSIO"));
+		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-SIMPOSIO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-CONGRESSO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DA-PARTICIPACAO-EM-ENCONTRO"));
 		adicionarEventosListaEventos(XmlUtils.getNos(lattes, "DETALHAMENTO-DE-OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS"));
 	}
 	
-	
-	
+	/**
+	 * Projetos dos ultimos 10 anos.
+	 */
 	private void setProjetosPesquisa() {
 		
 		NodeList nos = XmlUtils.getNos(lattes, "PROJETO-DE-PESQUISA");
@@ -248,12 +272,19 @@ public class Candidato {
 			if (anoVinculo == null || anoVinculo == "") {
 				anoVinculo = "0";
 			}
-			projetosPesquisa.add(new ProjetoPesquisa(Integer.parseInt(anoVinculo), titulo, coordenadorProjeto));
+			
+			int ano = Integer.parseInt(anoVinculo);
+			if (ano >= Constantes.ANO_LIMITE) {
+				projetosPesquisa.add(new ProjetoPesquisa(ano, titulo, coordenadorProjeto));
+			}
+		
 		}
 		
 	}
 	
-	
+	/**
+	 * Ano de formacao nos ultimos 10 anos.
+	 */
 	private void setFormacoesAcademicas() {
 		NodeList nos = XmlUtils.getNos(lattes, "FORMACAO-ACADEMICA-TITULACAO");
 		
@@ -268,10 +299,13 @@ public class Candidato {
 				String titulo = no.getNodeName();
 				
 				if (dataFormacao == null || dataFormacao == "") {
-					dataFormacao = "0";
+					dataFormacao = String.valueOf(Constantes.SEM_ANO);
 				}
 				
-				formacoesAcademicas.add(new FormacaoAcademica(Integer.parseInt(dataFormacao), nomeUniversidade, titulo));
+				int ano = Integer.parseInt(dataFormacao);
+				if (ano >= Constantes.ANO_LIMITE) {
+					formacoesAcademicas.add(new FormacaoAcademica(ano, nomeUniversidade, titulo));
+				}
 				
 			}
 
@@ -280,7 +314,9 @@ public class Candidato {
 	}
 	
 	
-
+	/**
+	 * Atuacoes nos ultimos 10 anos, ou atuais.
+	 */
 	private void setAtuacoesProfissionais() {
 		
 		NodeList nos = XmlUtils.getNos(lattes, "VINCULOS"); // ATUACAO-PROFISSIONAL -> VINCULOS
@@ -290,23 +326,73 @@ public class Candidato {
 			String anoInicio = XmlUtils.getValorAtributo(no, "ANO-INICIO");
 			String anoFim = XmlUtils.getValorAtributo(no, "ANO-FIM");
 			String localAtuacao = XmlUtils.getValorAtributo(no.getParentNode(), "NOME-INSTITUICAO");
-			String vinculo = XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO");
+			
+			String descricaoVinculo = 
+					XmlUtils.getValorAtributo(no, "TIPO-DE-VINCULO") + " - " +
+					XmlUtils.getValorAtributo(no, "OUTRO-VINCULO-INFORMADO") + " - " +
+					XmlUtils.getValorAtributo(no, "OUTRO-ENQUADRAMENTO-FUNCIONAL-INFORMADO");
+			
 			
 			if (anoInicio == null || anoInicio == "") {
 				anoInicio = "0";
 			}
 			
+			// Pode ser uma atuacao vigente, sem ano final.
 			if (anoFim == null || anoFim == "") {
-				anoFim = "0";
+				anoFim = String.valueOf(Constantes.SEM_ANO);
 			}
 			
-			atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), Integer.parseInt(anoFim), localAtuacao, vinculo));
+			int anoFinal = Integer.parseInt(anoFim);
+			if (anoFinal >= Constantes.ANO_LIMITE) {
+				atuacoesProfissionais.add(new AtuacaoProfissional(Integer.parseInt(anoInicio), anoFinal, localAtuacao, descricaoVinculo));
+			}
+			
 		}	
 		
 	}
 	
+		
+	/**
+	 * Altera a variavel possuiVinculoInstituicao para true se nos ultimos 10 anos o candidato:
+	 * 1. Participou em projetos cujo coordenador eh um professor da UNIRIO.
+	 * 2. Tem formacao academica/bolsas cuja instituicao eh a UNIRIO.
+	 * 3. Possui alguma atuacao profissional cuja instituicao eh a UNIRIO (aqui estao
+	 * inclusas representacao discente ou outras).
+	 */
+	private void setVinculoInstituicao() {
+		// Projetos:
+		for (ProjetoPesquisa projeto : projetosPesquisa) {
+			if (ProfessorController.ehProfessorUnirio(projeto.getCoordenadorProjeto())) {
+				vinculos.add(new Vinculo(projeto.getAnoVinculo(), projeto.getTitulo(), "Projeto de Pesquisa"));
+			}
+		}
+		
+		
+		// Formacao academica:
+		for (FormacaoAcademica formacao : formacoesAcademicas) {
+			if (formacao.getNomeUniversidade().contains("Universidade Federal do Estado do Rio de Janeiro")) {
+				vinculos.add(new Vinculo(formacao.getDataFormacao(), formacao.getTitulo(), "Formacao academica"));
+			}
+		}
+		
+		
+		// Atuacao profissional:
+		for (AtuacaoProfissional atuacao : atuacoesProfissionais) {
+			if (atuacao.getLocalAtuacao().contains("Universidade Federal do Estado do Rio de Janeiro")) {
+				vinculos.add(new Vinculo(atuacao.getAnoFim(), atuacao.getDescricaoVinculo(), "Atuacao profissional"));
+			}
+		}
+		
+		
+		if (vinculos.size() > 0) {
+			possuiVinculoInstituicao = true;
+		}
+		
+	}
+	
+	
 
-	public int getPontuacao() {
+	private void setPontuacao() {
 		pontuacao = 0;
 		
 		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovacao no curso que a bolsa esta sendo pleiteada
@@ -319,16 +405,18 @@ public class Candidato {
 		pontuacao += getPontuacaoQualisRestrito();
 		pontuacao += getPontuacaoQualisCompleto();
 				
+		// Eventos:
+		pontuacao += getPontuacaoEventos();
 		
-		// RN5 - O candidato recebe um ponto por cada evento participado. O maximo de pontos por esse requisito sao cinco.
-		
-		// RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO nos ultimos 10 anos, seja por participacao 
-		// em projetos, bolsas de pesquisa, representacao discente ou similar.
-		
-		return pontuacao;
+		// Vinculos:
+		pontuacao += getPontuacaoVinculos();
 		
 	}
 
+	public int getPontuacao() {
+		return pontuacao;
+	}
+	
 	
 	/**
 	 * RN2 - O candidato recebe um ponto por cada premio recebido nos ultimos 10 anos.
@@ -357,6 +445,41 @@ public class Candidato {
 	 */
 	public int getPontuacaoQualisCompleto() {
 		return artigosCompletosQualisCompleto.size();
+	}
+	
+	
+	/**
+	 * RN5 - O candidato recebe um ponto por cada evento participado. 
+	 * O maximo de pontos por esse requisito sao cinco.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoEventos() {
+		if (eventos.size() > 5) {
+			return 5;
+		} else {
+			return eventos.size();
+		}
+	}
+	
+	
+	/**
+	 * RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO 
+	 * nos ultimos 10 anos, seja por participacao em projetos, 
+	 * bolsas de pesquisa, representacao discente ou similar.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoVinculos() {
+		if (possuiVinculoInstituicao) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+
+	@Override
+	public String toString() {
+		return nome + "	" + pontuacao;
 	}
 	
 

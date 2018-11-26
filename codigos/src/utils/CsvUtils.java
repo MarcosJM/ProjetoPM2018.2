@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Classe que realiza a leitura de arquivos CSV
+ * Classe que realiza a leitura de arquivos CSV.
  */
 public class CsvUtils 
 {
@@ -49,9 +49,6 @@ public class CsvUtils
         }
 		return dadosDoArquivo;
 	}
-	
-	
-	
 	
 }
  

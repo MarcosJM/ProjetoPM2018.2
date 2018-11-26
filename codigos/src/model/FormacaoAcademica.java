@@ -11,5 +11,17 @@ public class FormacaoAcademica {
 		this.nomeUniversidade = nomeUniversidade;
 		this.titulo = titulo;
 	}
+
+	public int getDataFormacao() {
+		return dataFormacao;
+	}
+
+	public String getNomeUniversidade() {
+		return nomeUniversidade;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
     
 }
