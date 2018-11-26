@@ -5,14 +5,13 @@ import utils.Constantes;
 /**
  * Vinculos que o candidato tem com a instituicao.
  * Podem ser um ProjetoPesquisa, FormacaoAcademica ou AtuacaoProfissional.
- *
  */
 public class Vinculo {
 	private int anoFimVinculo;
 	private String nome;
 	private String tipo;
 	
-	
+	// Construtor.
 	public Vinculo(int anoFimVinculo, String nome, String tipo) {
 		this.anoFimVinculo = anoFimVinculo;
 		this.nome = nome;
