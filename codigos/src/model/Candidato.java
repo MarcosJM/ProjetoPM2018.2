@@ -52,6 +52,7 @@ public class Candidato {
 			setPontuacao();
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Erro na leitura do lattes.");
 		}
 	}
@@ -225,7 +226,13 @@ public class Candidato {
 				ano = "0";
 			}
 			
-			eventos.add(new Evento(Integer.parseInt(ano), nome));
+			Evento evento = new Evento(Integer.parseInt(ano), nome);
+			QualisEnum qualis = evento.getQualis();
+			
+			// Tem classificacao de A1 a B5.
+			if (qualis != null) {
+				eventos.add(evento);
+			}
 			
 		}
 	}

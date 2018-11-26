@@ -4,7 +4,7 @@ import model.ArquivoCsv;
 
 public class PeriodicosController {
 
-	private static ArquivoCsv periodicos = new ArquivoCsv("../../../arquivos/dados/qualis_periodicos.csv", ",");;
+	private static ArquivoCsv periodicos = new ArquivoCsv("../arquivos/dados/qualis_periodicos.csv", ";");;
 	
 	
 	/**
@@ -15,7 +15,7 @@ public class PeriodicosController {
 	public static String getClassificacaoCapesPorTitulo(String titulo) 
 	{
 		// Primeiro, pega o indice do elemento.
-		int indiceLinha = periodicos.getLinhaElemento("Titulo", titulo);
+		int indiceLinha = periodicos.getLinhaElemento("Titulo", titulo, false);
 		
 		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
 		if (indiceLinha != -1)
@@ -31,7 +31,7 @@ public class PeriodicosController {
 	 */
 	public static String getClassificacaoCapesPorISSN(String issn) 
 	{
-		int indiceLinha = periodicos.getLinhaElemento("ISSN", issn);
+		int indiceLinha = periodicos.getLinhaElemento("ISSN", issn, true);
 		if (indiceLinha != -1)
 			return periodicos.getElemento("QUALIS", indiceLinha);
 		return "";	
