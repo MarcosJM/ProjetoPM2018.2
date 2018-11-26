@@ -2,6 +2,11 @@ package controller;
 
 import model.ArquivoCsv;
 
+
+/**
+ * Classe para leitura e pesquisa no arquivo com todos os
+ * periodicos conhecidos.
+ */
 public class PeriodicosController {
 
 	private static ArquivoCsv periodicos = new ArquivoCsv("../arquivos/dados/qualis_periodicos.csv", ";");;

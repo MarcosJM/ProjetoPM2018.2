@@ -2,6 +2,10 @@ package controller;
 
 import model.ArquivoCsv;
 
+/**
+ * Classe para leitura e pesquisa no arquivo com todas as 
+ * conferencias conhecidas.
+ */
 public class ConferenciaController {
 
 	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ";");;
@@ -28,10 +32,8 @@ public class ConferenciaController {
 	 * @return String, o qualis da conferencia.
 	 */
 	public static String getClassificacaoCapesPorNome(String nome) {
-		// Primeiro, pega o indice do elemento.
 		int indiceLinha = conferencias.getLinhaElemento("NOME DA CONFERENCIA", nome, false);
 		
-		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
 		if (indiceLinha != -1)
 			return conferencias.getElemento("QUALIS", indiceLinha);
 		return "";

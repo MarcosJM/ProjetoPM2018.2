@@ -12,7 +12,6 @@ import utils.Constantes;
 import utils.CsvUtils;
 
 /**
- * 
  *  Classe que realiza o processamento e busca em arquivos CSV.
  */
 public class ArquivoCsv {
@@ -39,30 +38,19 @@ public class ArquivoCsv {
 		this.quantidadeLinhas = dadosCsv.size();
 		this.quantidadeColunas = dadosCsv.get(0).length;
 	}
+
 	
 	/**
-	 * 
-	 * @return int - retorna a quantidade de linhas na tabela representada por CSV.
+	 * Encontra um elemento dado o nome da coluna e a linha na qual esta.
+	 * @param nomeColuna - String, nome da coluna conforme no CSV.
+	 * @param locLinha - int, inteiro positivo maior ou igual a zero, linha 
+	 * do elemento.
+	 * @return String, conteudo da celula com o elemento.
 	 */
-	public int getQuantidadeLinhas()
-	{
-		return this.quantidadeLinhas;
-	}
-	
-	/**
-	 * 
-	 * @return int - retorna a quantidade de colunas na tabela representada por CSV.
-	 */
-	public int getQuantidadeColunas()
-	{
-		return this.quantidadeColunas;
-	}
-	
-	
 	public String getElemento(String nomeColuna, int locLinha)
-	// Para um futuro proximo: padronizar os nomes loc, indice e posicao pois se referem a mesma coisa
+	// TODO: padronizar os nomes loc, indice e posicao pois se referem a mesma coisa
 	{
-		if (locLinha < this.getQuantidadeLinhas())
+		if (locLinha < this.quantidadeLinhas && locLinha >= 0)
 		{
 			String[] linha = dadosCsv.get(locLinha);
 			int indiceColuna = this.getPosicaoColuna(nomeColuna);
@@ -70,7 +58,7 @@ public class ArquivoCsv {
 			{
 				return linha[indiceColuna];
 			}	
-		}else {
+		} else {
 			System.err.println("O endereco da linha esta fora dos limites.");
 		}
 		return "";
@@ -85,11 +73,11 @@ public class ArquivoCsv {
 	 */
 	public String getElemento(int locLinha, int locColuna)
 	{
-		if (locLinha < this.getQuantidadeLinhas())
+		if (locLinha < this.quantidadeLinhas)
 		{
 			String[] linha = dadosCsv.get(locLinha);
 			
-			if (locColuna < this.getQuantidadeColunas())
+			if (locColuna < this.quantidadeColunas)
 			{
 				return linha[locColuna];
 			}else {
@@ -111,7 +99,7 @@ public class ArquivoCsv {
 	private int getPosicaoColuna(String nomeColuna)
 	{
 		String[] colunas = this.dadosCsv.get(0);
-		for (int iterator = 0; iterator < this.getQuantidadeColunas(); iterator ++)
+		for (int iterator = 0; iterator < this.quantidadeColunas; iterator ++)
 		{
 			if (nomeColuna.equals(colunas[iterator]))
 			{
@@ -219,9 +207,9 @@ public class ArquivoCsv {
 	 */
 	public String[] getElementosLinha(int indiceLinha)
 	{
-		if (indiceLinha < this.getQuantidadeLinhas())
+		if (indiceLinha < this.quantidadeLinhas)
 		{
-			int quantidadeColunas = this.getQuantidadeColunas();
+			int quantidadeColunas = this.quantidadeColunas;
 			String[] elementosLinha = new String[quantidadeColunas];
 			for (int iterator = 0; iterator < quantidadeColunas; iterator ++)
 			{
@@ -247,8 +235,8 @@ public class ArquivoCsv {
 		int indiceColuna = this.getPosicaoColuna(nomeColuna);
 		if (indiceColuna != -1)
 		{
-			String[] elementosColuna = new String[this.getQuantidadeLinhas() - 1];
-			for (int iterator = 1; iterator < this.getQuantidadeLinhas(); iterator ++)
+			String[] elementosColuna = new String[this.quantidadeLinhas - 1];
+			for (int iterator = 1; iterator < this.quantidadeLinhas; iterator ++)
 			{
 				elementosColuna[iterator - 1] = this.dadosCsv.get(iterator)[indiceColuna];
 			}

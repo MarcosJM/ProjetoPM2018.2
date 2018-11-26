@@ -2,9 +2,19 @@ package controller;
 
 import model.ArquivoCsv;
 
+
+/**
+ * Classe para leitura e pesquisa no arquivo com todos os 
+ * professores conhecidos.
+ */
 public class ProfessorController {
 	private static ArquivoCsv professoresPPGI = new ArquivoCsv("../arquivos/dados/professores_bsi_ppgi.csv", ",");;
 	
+	/**
+	 * Retorna se um determinado professor esta no corpo docente da UNIRIO.
+	 * @param professor - String, nome do professor a verificar.
+	 * @return true se for docente, false se nao.
+	 */
 	public static boolean ehProfessorUnirio(String professor)
 	{
 		String[] professores = professoresPPGI.getElementosColuna("Nome professor");
