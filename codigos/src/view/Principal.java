@@ -2,7 +2,6 @@ package view;
 
 import utils.CommandLine;
 import controller.ComissaoBolsasController;
-import java.util.Scanner;
 
 /**
  * Interface com o usuário.
@@ -10,18 +9,6 @@ import java.util.Scanner;
  */
 
 public class Principal {
-	
-	/**
-	 * Funcao para decompor a entrada passada em argumentos.
-	 * Isso eh feito ao cortar a string, utilizando espaco como separador.
-	 * 
-	 * @param entrada
-	 * @return argumentos
-	 */
-	public static String[] decompoeEntrada(String entrada) {
-		String[] argumentos = entrada.split(" ");
-		return argumentos;
-	}
 	
 	/**
 	 * Funcao que, de acordo com o comando, redireciona para a chamada de funcao adequada.
@@ -99,13 +86,7 @@ public class Principal {
 	
 	public static void main(String[] args) {
 		
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("$ ");
-		String entrada = scanner.nextLine();
-		String[] argumentos = decompoeEntrada(entrada);
-		scanner.close();
-		
-		executaComandos(argumentos);
+		executaComandos(args);
 
 	}
 }
