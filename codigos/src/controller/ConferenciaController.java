@@ -8,7 +8,7 @@ import model.ArquivoCsv;
  */
 public class ConferenciaController {
 
-	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ";");;
+	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ",");
 	
 	/**
 	 * Encontra o qualis de uma conferencia por sua sigla.
@@ -19,7 +19,6 @@ public class ConferenciaController {
 	{
 		// Primeiro, pega o indice do elemento.
 		int indiceLinha = conferencias.getLinhaElemento("SIGLA", sigla, true);
-		
 		// Depois de checar se foi encontrado, pega o elemento da coluna QUALIS, que esta na mesma linha.
 		if (indiceLinha != -1)
 			return conferencias.getElemento("QUALIS", indiceLinha);

@@ -123,6 +123,7 @@ public class ArquivoCsv {
 		{
 			elemento = elemento.toUpperCase();
 			if (exato) {
+				
 				return procuraMatchExato(posicaoColuna, elemento);
 			} else {
 				return procuraMatchNaoExato(posicaoColuna, elemento);
@@ -240,6 +241,7 @@ public class ArquivoCsv {
 			{
 				elementosColuna[iterator - 1] = this.dadosCsv.get(iterator)[indiceColuna];
 			}
+			return elementosColuna;
 		}else {
 			System.err.println("Coluna nao existente.");
 		}
