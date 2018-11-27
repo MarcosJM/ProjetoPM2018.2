@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import model.Artigo;
 import model.Conferencia;
 import model.Periodico;
+import model.QualisEnum;
 
 /**
  * Classe de testes unitarios para a classe de modelo Artigo.
@@ -30,7 +31,7 @@ public class ArtigoTest {
 	 * Testa se um artigo de conferencia conhecida obtem o qualis correto.
 	 */
 	void testArtigoComConferencia() {
-		assertEquals("A1", artigo2.getQualis());
+		assertEquals(QualisEnum.A1, artigo2.getQualis());
 	}
 	
 	

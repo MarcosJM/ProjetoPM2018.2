@@ -8,7 +8,7 @@ import model.ArquivoCsv;
  */
 public class ConferenciaController {
 
-	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ",");
+	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ";");
 	
 	/**
 	 * Encontra o qualis de uma conferencia por sua sigla.

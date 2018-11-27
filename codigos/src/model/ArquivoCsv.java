@@ -149,11 +149,14 @@ public class ArquivoCsv {
 		// Comparacao dos elementos:
 		for (int iterator = 1; iterator < quantidadeLinhas; iterator ++)
 		{
-			String valorElemento = this.dadosCsv.get(iterator)[posicaoColuna];
+			String valorElemento = this.dadosCsv.get(iterator)[posicaoColuna].toUpperCase();
 			
-			mapaScoreJw.put(iterator, jw.distance(valorElemento, elemento));
-			mapaScoreLcs2.put(iterator, lcs2.distance(valorElemento, elemento));
-
+			if (valorElemento.equals(elemento)) {
+				return iterator;
+			} else {
+				mapaScoreJw.put(iterator, jw.distance(valorElemento, elemento));
+				mapaScoreLcs2.put(iterator, lcs2.distance(valorElemento, elemento));
+			}
 		}
 		
 		// Encontra o elemento com a maior similaridade.
