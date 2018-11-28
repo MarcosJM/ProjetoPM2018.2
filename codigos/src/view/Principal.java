@@ -69,6 +69,10 @@ public class Principal {
 				if (comandos.isVinculoUnirio()) {
 					ComissaoBolsasController.geraSaidaVinculos(verboso);
 				}
+				//Nesse caso, nenhum argumento relacionado a saida foi passado
+				if (!comandos.isPremios() && !comandos.isArtigosNoQualisRestrito() && !comandos.isArtigosForaQualisRestrito() && !comandos.isEventosClassificados() && !comandos.isVinculoUnirio()) {
+					ComissaoBolsasController.geraSaidaSaidaCompleta(verboso); //Por padrao, ira gerar a saida completa
+				}
 			}
 			
 			//Finaliza o programa, associando o ranking final dos candidatos ao arquivo de saida
