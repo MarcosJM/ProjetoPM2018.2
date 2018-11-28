@@ -47,3 +47,20 @@ Não há interface gráfica. A interação com o usuário se dá inteiramente pe
 -   -anr : gera a saída referente aos artigos completos fora do Qualis Restrito (ou seja, publicados em conferências ou periódicos classificados como B2, B3, B4 e B5). Para cada candidato, é exibida a quantidade de artigos considerados e a pontuação obtida. Se o modo verboso estiver ativado, é exibida ao final, para cada candidato: o ano de publicação, nome do artigo, conferência ou periódico associado e o Qualis associado.
 
 -   -pe : gera a saída referente à participação em eventos classificados (ou seja, referentes a conferências classificadas como A1, A2, B1, B2, B3, B4 e B5). Para cada candidato, é exibida a quantidade de participações consideradas e a pontuação obtida.
+
+
+## Exemplos
+
+~~~~
+java Principal -o C:\saida.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0
+
+java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l C:\saida_log.txt
+
+java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l C:\saida_log.txt -c
+
+java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\0985291000032685.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\5998143228852295.xml 0 -v -l C:\saida_log.txt -pr 
+
+java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\0985291000032685.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\5998143228852295.xml 0 -v -pr -pe 
+~~~~
+
+
