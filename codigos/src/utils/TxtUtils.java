@@ -8,7 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 /**
- * Classe que realiza a escrita em arquivos TXT.
+ * Classe que realiza a escrita em arquivos TXT, 
+ * por padrao escreve em UTF-8.
  */
 public class TxtUtils {
 	

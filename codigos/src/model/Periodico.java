@@ -27,20 +27,33 @@ public class Periodico {
 	private void setQualis() {
 		String qualisSt = "";
 		
-		// Caso tenha ISSN dah preferencia buscar por ele, uma vez que eh uma busca exata.
-		if (issn == null) {
-			qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);	
-		} else {
+		// Caso tenha ISSN dah preferencia a buscar por ele, uma vez que eh uma busca exata.
+		if (issn != null & !issn.equals("")) {
 			// Padroniza o ISSN do Periodico de acordo com o esperado pelo arquivo CSV.
 			issn = issn.replaceAll("-", "");
-			issn = issn.substring(0, 4) + "-" + issn.substring(4, issn.length());
-			qualisSt = PeriodicosController.getClassificacaoCapesPorISSN(issn);
+			
+			if (issn.length() == 8) {
+				// ISSN tem o formato XXXX-XXXX e por isso eh dividido em duas substrings de tamanho 4:
+				issn = issn.substring(0, 4) + "-" + issn.substring(4, issn.length());
+				qualisSt = PeriodicosController.getClassificacaoCapesPorISSN(issn);
+			} else {
+				qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);	
+			}
+			
+		} else {
+			qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);	
 		}
+		
 		
 		if (qualisSt.equals("")) {
 			qualis = null;
 		} else {
-			qualis = QualisEnum.valueOf(qualisSt);
+			try {
+				qualis = QualisEnum.valueOf(qualisSt);
+			} catch(Exception e) {
+				// Nao era uma String esperada para o enum.
+				qualis = null;
+			}
 		}
 	}
 	

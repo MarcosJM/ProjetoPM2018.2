@@ -27,7 +27,12 @@ public class Conferencia {
 		if (qualisSt.equals("")) {
 			qualis = null;
 		} else {
-			qualis = QualisEnum.valueOf(qualisSt);
+			try {
+				qualis = QualisEnum.valueOf(qualisSt);
+			} catch(Exception e) {
+				// Nao era uma String esperada para o enum.
+				qualis = null;
+			}
 		}
 	}
 	

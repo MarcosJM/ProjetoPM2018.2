@@ -170,11 +170,11 @@ public class ArquivoCsv {
 		Entry<Integer, Double> melhorMatchJw = sortedJw.findFirst().get();
 		Entry<Integer, Double> melhorMatchLcs2 = sortedLcs2.findFirst().get();
 
-		if (melhorMatchJw.getValue() >= 0.985) { // similaridade >= 98.5%
+		if (melhorMatchJw.getValue() >= Constantes.SIMILARIDADE_DESEJADA) { 
 			return melhorMatchJw.getKey();
 		}
 		
-		if (melhorMatchLcs2.getValue() >= 0.985) { // similaridade >= 98.5%
+		if (melhorMatchLcs2.getValue() >= Constantes.SIMILARIDADE_DESEJADA) {
 			return melhorMatchLcs2.getKey();
 		}
 		

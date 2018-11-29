@@ -22,7 +22,7 @@ public class Vinculo {
 	@Override
 	public String toString() {
 		StringBuilder conteudo = new StringBuilder("");
-		if (anoFimVinculo == Constantes.SEM_ANO) {
+		if (anoFimVinculo == Constantes.ANO_FINAL_PADRAO) {
 			conteudo.append("-\t");
 		} else {
 			conteudo.append(anoFimVinculo + "\t");

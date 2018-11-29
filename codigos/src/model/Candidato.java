@@ -88,7 +88,7 @@ public class Candidato {
 			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-PREMIO-OU-TITULO");
 			String anoPremiacao = XmlUtils.getValorAtributo(no, "ANO-DA-PREMIACAO");
 			
-			int ano = 0;
+			int ano = Constantes.ANO_INICIAL_PADRAO;
 			if (anoPremiacao != null) {
 				ano = Integer.parseInt(anoPremiacao);
 			}
@@ -127,7 +127,7 @@ public class Candidato {
 				String issn = XmlUtils.getValorAtributo(detalhes, "ISSN");
 				Periodico periodico = new Periodico(issn, nomePeriodico);
 				
-				int ano = 0;
+				int ano = Constantes.ANO_INICIAL_PADRAO;
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
@@ -160,7 +160,7 @@ public class Candidato {
 				String nomeEvento = XmlUtils.getValorAtributo(detalhes, "NOME-DO-EVENTO");
 				Conferencia conferencia = new Conferencia(nomeEvento);
 				
-				int ano = 0;
+				int ano = Constantes.ANO_INICIAL_PADRAO;
 				if (anoPublicacao != null) {
 					ano = Integer.parseInt(anoPublicacao);
 				}
@@ -226,7 +226,7 @@ public class Candidato {
 			String nome = XmlUtils.getValorAtributo(no, "NOME-DO-EVENTO");
 			
 			if (ano == null || ano == "") {
-				ano = "0";
+				ano = String.valueOf(Constantes.ANO_INICIAL_PADRAO);
 			}
 			
 			Evento evento = new Evento(Integer.parseInt(ano), nome);
@@ -281,7 +281,7 @@ public class Candidato {
 			}
 			
 			if (anoVinculo == null || anoVinculo == "") {
-				anoVinculo = "0";
+				anoVinculo = String.valueOf(Constantes.ANO_INICIAL_PADRAO);
 			}
 			
 			int ano = Integer.parseInt(anoVinculo);
@@ -309,7 +309,7 @@ public class Candidato {
 				String titulo = no.getNodeName();
 				
 				if (dataFormacao == null || dataFormacao == "") {
-					dataFormacao = String.valueOf(Constantes.SEM_ANO);
+					dataFormacao = String.valueOf(Constantes.ANO_FINAL_PADRAO);
 				}
 				
 				int ano = Integer.parseInt(dataFormacao);
@@ -341,12 +341,12 @@ public class Candidato {
 			
 			
 			if (anoInicio == null || anoInicio == "") {
-				anoInicio = "0";
+				anoInicio = String.valueOf(Constantes.ANO_INICIAL_PADRAO);
 			}
 			
 			// Pode ser uma atuacao vigente, sem ano final.
 			if (anoFim == null || anoFim == "") {
-				anoFim = String.valueOf(Constantes.SEM_ANO);
+				anoFim = String.valueOf(Constantes.ANO_FINAL_PADRAO);
 			}
 			
 			int anoFinal = Integer.parseInt(anoFim);
@@ -433,7 +433,7 @@ public class Candidato {
 	 * @return int, quantidade de pontos dessa categoria.
 	 */
 	public int getPontuacaoPremios() {
-		return premios.size();
+		return premios.size() * Constantes.PONTOS_PREMIOS_MULTIPLICADOR;
 	}
 	
 	
@@ -443,7 +443,7 @@ public class Candidato {
 	 * @return int, quantidade de pontos dessa categoria.
 	 */
 	public int getPontuacaoQualisRestrito() {
-		return artigosCompletosQualisRestrito.size() * 3;
+		return artigosCompletosQualisRestrito.size() * Constantes.PONTOS_QUALIS_RESTRITO_MULTIPLICADOR;
 	
 	}
 	
@@ -454,7 +454,7 @@ public class Candidato {
 	 * @return int, quantidade de pontos dessa categoria.
 	 */
 	public int getPontuacaoQualisCompleto() {
-		return artigosCompletosQualisCompleto.size();
+		return artigosCompletosQualisCompleto.size() * Constantes.PONTOS_QUALIS_COMPLETO_MULTIPLICADOR;
 	}
 	
 	
@@ -464,8 +464,8 @@ public class Candidato {
 	 * @return int, quantidade de pontos dessa categoria.
 	 */
 	public int getPontuacaoEventos() {
-		if (eventos.size() > 5) {
-			return 5;
+		if (eventos.size() > Constantes.PONTOS_EVENTOS) {
+			return Constantes.PONTOS_EVENTOS;
 		} else {
 			return eventos.size();
 		}
@@ -480,7 +480,7 @@ public class Candidato {
 	 */
 	public int getPontuacaoVinculos() {
 		if (possuiVinculoInstituicao) {
-			return 1;
+			return Constantes.PONTOS_VINCULOS;
 		} else {
 			return 0;
 		}

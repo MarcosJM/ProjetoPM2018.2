@@ -8,6 +8,7 @@ import model.Candidato;
 import model.Evento;
 import model.Premio;
 import model.Vinculo;
+import utils.Constantes;
 import utils.TxtUtils;
 
 /**
@@ -33,7 +34,7 @@ public class ComissaoBolsasController {
 	public static void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
 		
 		if (numeroSemestreSemReprovacao.equals("") || numeroSemestreSemReprovacao == null) {
-			numeroSemestreSemReprovacao = "0";
+			numeroSemestreSemReprovacao = String.valueOf(Constantes.NUMERO_SEMESTRES_SEM_REPROVACAO_PADRAO);
 		}
 		Candidato candidato = new Candidato(caminhoXml, Integer.parseInt(numeroSemestreSemReprovacao));
 		
@@ -242,7 +243,8 @@ public class ComissaoBolsasController {
 	
 
 	/**
-	 * Ordena os candidatos disponiveis por sua pontuacao.
+	 * Ordena os candidatos disponiveis por sua pontuacao,
+	 * do maior para o menor (decrescente).
 	 */
 	public static void ordenaCandidatos() {
 		
