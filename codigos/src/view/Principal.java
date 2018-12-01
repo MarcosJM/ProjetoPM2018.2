@@ -1,6 +1,7 @@
 package view;
 
 import utils.CommandLine;
+
 import controller.ComissaoBolsasController;
 
 /**
@@ -86,11 +87,12 @@ public class Principal {
 	/**
 	 * Ponto de entrada na aplicação.
 	 * @param args
+	 * @throws IOException 
 	 */
 	
 	public static void main(String[] args) {
-		
+			
 		executaComandos(args);
-
+		
 	}
 }

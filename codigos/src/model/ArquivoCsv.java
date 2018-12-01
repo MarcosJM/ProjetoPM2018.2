@@ -1,5 +1,6 @@
 package model;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,9 +33,9 @@ public class ArquivoCsv {
 	 * @param endereco - String que indica o caminho ate o arquivo
 	 * @param separador - String que indica o tipo de separador utilizado no arquivo csv
 	 */
-	public ArquivoCsv(String endereco, String separador)
+	public ArquivoCsv(InputStream in, String separador)
 	{
-		this.dadosCsv = CsvUtils.lerCsv(endereco, separador);
+		this.dadosCsv = CsvUtils.lerCsv(in, separador);
 		this.quantidadeLinhas = dadosCsv.size();
 		this.quantidadeColunas = dadosCsv.get(0).length;
 	}

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -20,16 +22,17 @@ public class CsvUtils
 	 * @throws FileNotFound exception caso o arquivo nao seja encontrado
 	 * @throws IOException caso nao seja mais possivel acessar o arquivo
 	 */
-	public static ArrayList<String[]> lerCsv(String endereco, String separador)
+	public static ArrayList<String[]> lerCsv(InputStream in, String separador)
 	{
+			
         BufferedReader leitor = null;
         String linha = "";
         ArrayList<String[]> dadosDoArquivo = new ArrayList<String[]>();
 		try {
-			leitor = new BufferedReader(new FileReader(endereco));
+			leitor = new BufferedReader(new InputStreamReader(in));
 			while ((linha = leitor.readLine()) != null) 
 			{
-				
+				System.out.println(linha);
 				//para cada linha do arquivo, realiza um split pelo separador (virgula, ponto e virgula, etc) e adiciona a arrayList
                 dadosDoArquivo.add(linha.split(separador));
 

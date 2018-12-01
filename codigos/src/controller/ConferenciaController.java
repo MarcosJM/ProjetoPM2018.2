@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.InputStream;
+
 import model.ArquivoCsv;
 
 /**
@@ -7,8 +9,10 @@ import model.ArquivoCsv;
  * conferencias conhecidas.
  */
 public class ConferenciaController {
+	
+	private static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = PeriodicosController.class.getResourceAsStream("/resources/qualis_conferencia.csv");
 
-	private static ArquivoCsv conferencias = new ArquivoCsv("../arquivos/dados/qualis_conferencia.csv", ";");
+	private static ArquivoCsv conferencias = new ArquivoCsv(ENDERECO_ARQUIVO_CONFERENCIA, ";");
 	
 	/**
 	 * Encontra o qualis de uma conferencia por sua sigla.

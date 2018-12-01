@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.InputStream;
+
 import model.ArquivoCsv;
 
 
@@ -8,7 +10,10 @@ import model.ArquivoCsv;
  * professores conhecidos.
  */
 public class ProfessorController {
-	private static ArquivoCsv professoresPPGI = new ArquivoCsv("../arquivos/dados/professores_bsi_ppgi.csv", ",");;
+	
+	private static final InputStream ENDERECO_ARQUIVO_PROFESSORES = PeriodicosController.class.getResourceAsStream("/resources/qualis_periodicos.csv");
+	
+	private static ArquivoCsv professoresPPGI = new ArquivoCsv(ENDERECO_ARQUIVO_PROFESSORES, ",");
 	
 	/**
 	 * Retorna se um determinado professor esta no corpo docente da UNIRIO.

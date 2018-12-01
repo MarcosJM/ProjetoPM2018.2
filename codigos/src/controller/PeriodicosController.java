@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.InputStream;
+
 import model.ArquivoCsv;
 
 
@@ -8,8 +10,10 @@ import model.ArquivoCsv;
  * periodicos conhecidos.
  */
 public class PeriodicosController {
+	
+	private static final InputStream ENDERECO_ARQUIVO_PERIODICOS = PeriodicosController.class.getResourceAsStream("/resources/qualis_periodicos.csv");
 
-	private static ArquivoCsv periodicos = new ArquivoCsv("../arquivos/dados/qualis_periodicos.csv", ";");;
+	private static ArquivoCsv periodicos = new ArquivoCsv(ENDERECO_ARQUIVO_PERIODICOS, ";");
 	
 	
 	/**
