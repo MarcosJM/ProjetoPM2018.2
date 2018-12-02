@@ -10,7 +10,7 @@ import model.ArquivoCsv;
  */
 public class ConferenciaController {
 	
-	private static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = PeriodicosController.class.getResourceAsStream("/resources/qualis_conferencia.csv");
+	private static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = ConferenciaController.class.getResourceAsStream("/resources/qualis_conferencia.csv");
 
 	private static ArquivoCsv conferencias = new ArquivoCsv(ENDERECO_ARQUIVO_CONFERENCIA, ";");
 	

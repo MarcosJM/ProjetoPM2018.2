@@ -11,7 +11,7 @@ import model.ArquivoCsv;
  */
 public class ProfessorController {
 	
-	private static final InputStream ENDERECO_ARQUIVO_PROFESSORES = PeriodicosController.class.getResourceAsStream("/resources/qualis_periodicos.csv");
+	private static final InputStream ENDERECO_ARQUIVO_PROFESSORES = ProfessorController.class.getResourceAsStream("/resources/professores_bsi_ppgi.csv");
 	
 	private static ArquivoCsv professoresPPGI = new ArquivoCsv(ENDERECO_ARQUIVO_PROFESSORES, ",");
 	

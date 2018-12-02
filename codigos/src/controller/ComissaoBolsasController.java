@@ -284,7 +284,7 @@ public class ComissaoBolsasController {
 		
 		try {
 			TxtUtils.escreverTxt(arquivoSaida, conteudoSaida.toString());
-			TxtUtils.escreverTxt(arquivoLog, conteudoLog.toString());
+			//TxtUtils.escreverTxt(arquivoLog, conteudoLog.toString());
 		} catch (Exception e) {
 			// TODO: colocar o log de erros no arquivo.
 			System.out.println(e.getMessage()); 
