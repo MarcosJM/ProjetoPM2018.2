@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.InputStream;
 import java.util.Calendar;
 
 /**
@@ -12,8 +13,8 @@ public class Constantes {
 	public static final Double SIMILARIDADE_DESEJADA = 98.5;
 	
 	// Datas.
-	public static final int ANO_LIMITE = Calendar.getInstance().YEAR - 10; // ultimos 10 anos.
-	public static final int ANO_ATUAL = Calendar.getInstance().YEAR;
+	public static final int ANO_LIMITE = Calendar.YEAR - 10; // ultimos 10 anos.
+	public static final int ANO_ATUAL = Calendar.YEAR;
 	public static final int ANO_FINAL_PADRAO = 9999;
 	public static final int ANO_INICIAL_PADRAO = 0;
 	
@@ -26,4 +27,9 @@ public class Constantes {
 	
 	// Comissao de bolsas.
 	public static final int NUMERO_SEMESTRES_SEM_REPROVACAO_PADRAO = 0;
+	
+	// Endereco dos arquivos CSV de busca.
+	public static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = Constantes.class.getResourceAsStream("/resources/qualis_conferencia.csv");
+	public static final InputStream ENDERECO_ARQUIVO_PERIODICOS = Constantes.class.getResourceAsStream("/resources/qualis_periodicos.csv");
+	public static final InputStream ENDERECO_ARQUIVO_PROFESSORES = Constantes.class.getResourceAsStream("/resources/professores_bsi_ppgi.csv");
 }

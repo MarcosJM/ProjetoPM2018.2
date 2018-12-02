@@ -1,18 +1,15 @@
 package controller;
 
-import java.io.InputStream;
-
 import model.ArquivoCsv;
+import utils.Constantes;
 
 /**
  * Classe para leitura e pesquisa no arquivo com todas as 
  * conferencias conhecidas.
  */
 public class ConferenciaController {
-	
-	private static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = ConferenciaController.class.getResourceAsStream("/resources/qualis_conferencia.csv");
 
-	private static ArquivoCsv conferencias = new ArquivoCsv(ENDERECO_ARQUIVO_CONFERENCIA, ";");
+	private static ArquivoCsv conferencias = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_CONFERENCIA, ";");
 	
 	/**
 	 * Encontra o qualis de uma conferencia por sua sigla.
