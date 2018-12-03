@@ -65,15 +65,17 @@ java -jar projetopm.jar <parâmetros>
 ## Exemplos 
 
 ~~~~
-java -jar projetopm.jar -o saida.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\arquivos\lattes\luiz_paulo_0239993115999249.xml 0
+java -jar executavel.jar -o saida.txt -a exemplos/lattes/0398675521406529.xml 2 -a exemplos/lattes/6938694286834426.xml 2
 
-java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt
+java -jar executavel.jar -o saida_completa.txt -a exemplos/lattes/1920411639358905.xml 1 -a exemplos/lattes/6938694286834426.xml 2 -a exemplos/lattes/luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt
 
-java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt -c
+java -jar executavel.jar -o saida_completa.txt -a exemplos/lattes/1920411639358905.xml 1 -a exemplos/lattes/6938694286834426.xml 2 -a exemplos/lattes/luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt -c
 
-java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\0985291000032685.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\5998143228852295.xml 0 -v -l saida_log.txt -pr 
+java -jar executavel.jar -o saida_completa.txt -a exemplos/lattes/0985291000032685.xml 1 -a exemplos/lattes/6938694286834426.xml 2 -a exemplos/lattes/5998143228852295.xml 0 -v -l saida_log.txt -pr 
 
-java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\0985291000032685.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\5998143228852295.xml 0 -v -pr -pe 
+java -jar executavel.jar -o saida_completa.txt -a exemplos/lattes/0985291000032685.xml 1 -a exemplos/lattes/6938694286834426.xml 2 -a exemplos/lattes/5998143228852295.xml 0 -v -pr -pe 
 ~~~~
 
+## Observação
 
+Se algum comando acima não funcionar, procurar colocar o caminho absoluto dos arquivos lattes.
