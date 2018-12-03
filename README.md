@@ -59,7 +59,7 @@ Dentro da pasta do programa, você encontrará um arquivo .jar. Para executar o 
 Dentro da pasta do projeto, só digitar (trocando <parâmetros> pelos comandos que deseja):
 
 ~~~~
-java -jar projetopm.jar <parâmetros>
+java -jar executavel.jar <parâmetros>
 ~~~~
 
 ## Exemplos 
