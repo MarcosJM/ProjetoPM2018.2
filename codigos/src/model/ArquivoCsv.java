@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import info.debatty.java.stringsimilarity.JaroWinkler;
 import utils.Constantes;
 import utils.CsvUtils;
+import utils.TxtUtils;
 
 /**
  *  Classe que realiza o processamento e busca em arquivos CSV.
@@ -19,7 +20,8 @@ public class ArquivoCsv {
 	private ArrayList<String[]> dadosCsv = new ArrayList<String[]>();
 	private int quantidadeLinhas;
 	private int quantidadeColunas;
-	
+	private TxtUtils logErros = new TxtUtils();
+
 	// Biblioteca para pesquisa de String por similaridade.
 	// Sao usados dois metodos para maior exatidao.
 	// Documentacao em https://github.com/tdebatty/java-string-similarity/blob/master/README.md
@@ -58,9 +60,12 @@ public class ArquivoCsv {
 			if (indiceColuna != -1)
 			{
 				return linha[indiceColuna];
-			}	
+			}
 		} else {
-			System.err.println("O endereco da linha esta fora dos limites.");
+			System.err.println(Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "Erro função getElemento de ArquivoCsv : " + Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
+
 		}
 		return "";
 	}
@@ -82,10 +87,16 @@ public class ArquivoCsv {
 			{
 				return linha[locColuna];
 			}else {
-				System.err.println("O endereco da coluna esta fora dos limites.");
+				System.err.println(Constantes.ERRO_ENDERECO_COLUNA_INALCANCAVEL);
+				logErros.appendDataTxt("../errorLog.txt", "Erro função getElemento de ArquivoCsv : " + Constantes.ERRO_ENDERECO_COLUNA_INALCANCAVEL);
+				logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
+
 			}
 		}else {
-			System.err.println("O endereco da linha esta fora dos limites.");
+			System.err.println(Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "Erro função getElemento de ArquivoCsv : " + Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
+
 		}
 		return "";	
 	}
@@ -222,7 +233,10 @@ public class ArquivoCsv {
 			}
 			return elementosLinha;
 		}else {
-			System.err.println("Linha nao existente.");
+			System.err.println(Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "Erro função getElementosLinha de ArquivoCsv : " + Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
+
 			return Constantes.ARRAY_VAZIO;
 		}
 	}
@@ -247,7 +261,10 @@ public class ArquivoCsv {
 			}
 			return elementosColuna;
 		}else {
-			System.err.println("Coluna nao existente.");
+			System.err.println(Constantes.ERRO_ENDERECO_COLUNA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "Erro função getElementosColuna de ArquivoCsv : " + Constantes.ERRO_ENDERECO_LINHA_INALCANCAVEL);
+			logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
+
 		}
 		
 		return Constantes.ARRAY_VAZIO;
