@@ -9,14 +9,31 @@ import utils.Constantes;
  */
 public class ConferenciaController {
 
-	private static ArquivoCsv conferencias = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_CONFERENCIA, ";");
+	private ArquivoCsv conferencias = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_CONFERENCIA, ";");
+	
+	/**
+	 * Implementacao do Singleton.
+	 */
+	
+	private static ConferenciaController unicaInstancia;
+	
+	private ConferenciaController() {}
+	
+	public static ConferenciaController getInstancia() {
+		
+		if (unicaInstancia == null) {
+			unicaInstancia = new ConferenciaController();
+		} 
+		
+		return unicaInstancia;
+    }
 	
 	/**
 	 * Encontra o qualis de uma conferencia por sua sigla.
 	 * @param sigla - String, sigla da conferencia que se deseja procurar.
 	 * @return String, o qualis da conferencia.
 	 */
-	public static String getClassificacaoCapesPorSigla(String sigla) 
+	public String getClassificacaoCapesPorSigla(String sigla) 
 	{
 		// Primeiro, pega o indice do elemento.
 		int indiceLinha = conferencias.getLinhaElemento("SIGLA", sigla, true);
@@ -31,7 +48,7 @@ public class ConferenciaController {
 	 * @param nome - String, nome da conferencia que se deseja procurar.
 	 * @return String, o qualis da conferencia.
 	 */
-	public static String getClassificacaoCapesPorNome(String nome) {
+	public String getClassificacaoCapesPorNome(String nome) {
 		int indiceLinha = conferencias.getLinhaElemento("NOME DA CONFERENCIA", nome, false);
 		
 		if (indiceLinha != -1)

@@ -27,7 +27,7 @@ public class ConferenciaTest {
 	 * Testa se uma sigla conhecida obtem o qualis correto.
 	 */
 	void testGetClassificacaoCapesPorSigla() {
-		assertEquals("A1", ConferenciaController.getClassificacaoCapesPorSigla("AAAI"));
+		assertEquals("A1", ConferenciaController.getInstancia().getClassificacaoCapesPorSigla("AAAI"));
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class ConferenciaTest {
 	 * Testa se uma sigla desconhecida obtem um qualis vazio.
 	 */
 	void testGetClassificacaoCapesPorSiglaDesconhecida() {
-		assertEquals("", ConferenciaController.getClassificacaoCapesPorSigla("-"));
+		assertEquals("", ConferenciaController.getInstancia().getClassificacaoCapesPorSigla("-"));
 	}	
 
 }

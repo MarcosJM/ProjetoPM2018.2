@@ -10,15 +10,31 @@ import utils.Constantes;
  */
 public class PeriodicosController {
 
-	private static ArquivoCsv periodicos = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_PERIODICOS, ";");
+	private ArquivoCsv periodicos = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_PERIODICOS, ";");
 	
+	/**
+	 * Implementacao do Singleton.
+	 */
+	
+	private static PeriodicosController unicaInstancia;
+	
+	private PeriodicosController() {}
+	
+	public static PeriodicosController getInstancia() {
+		
+		if (unicaInstancia == null) {
+			unicaInstancia = new PeriodicosController();
+		} 
+		
+		return unicaInstancia;
+    }
 	
 	/**
 	 * Encontra o qualis de um periodico por seu titulo.
 	 * @param titulo - String, titulo do periodico que se deseja procurar.
 	 * @return String, o qualis do periodico.
 	 */
-	public static String getClassificacaoCapesPorTitulo(String titulo) 
+	public String getClassificacaoCapesPorTitulo(String titulo) 
 	{
 		// Primeiro, pega o indice do elemento.
 		int indiceLinha = periodicos.getLinhaElemento("Titulo", titulo, false);
@@ -35,7 +51,7 @@ public class PeriodicosController {
 	 * @param issn - String, ISSN do periodico que se deseja procurar.
 	 * @return String, o qualis do periodico.
 	 */
-	public static String getClassificacaoCapesPorISSN(String issn) 
+	public String getClassificacaoCapesPorISSN(String issn) 
 	{
 		int indiceLinha = periodicos.getLinhaElemento("ISSN", issn, true);
 		if (indiceLinha != -1)

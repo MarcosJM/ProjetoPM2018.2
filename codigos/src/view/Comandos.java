@@ -1,9 +1,6 @@
 package view;
 
 import utils.CommandLine.Option;
-import utils.CommandLine.Parameters;
-
-import java.util.List;
 
 /**
  * Classe para definir os comandos (conceitualmente, tido como opcoes) aceitos pelo sistema e suas respectivas variaveis associadas. 
@@ -28,6 +25,21 @@ import java.util.List;
  */
 
 public class Comandos {
+	
+	/**
+	 * Implementacao do Singleton.
+	 */
+	
+	private static Comandos unicaInstancia;
+	
+	private Comandos() {}
+	
+	public static Comandos getInstancia() {
+		if (unicaInstancia == null) {
+			unicaInstancia = new Comandos();
+		}
+		return unicaInstancia;
+	}
 	
 	//"Arity" descreve que serao obrigatorios dois argumentos para esse comando
 	@Option(names = "-a", arity = "2", description = "Indica o dado do candidato a ser considerado (nº de semestres sem reprovacao) e o caminho do arquivo XML.", required = true)

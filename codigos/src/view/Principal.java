@@ -35,49 +35,49 @@ public class Principal {
 	 * 
 	 */
 	
-	public static void executaComandos(String[] argumentos) {
-		Comandos comandos = new Comandos();
+	public static void executaComandos(String[] argumentos) {	
+		Comandos comandos = Comandos.getInstancia();
 		
 		try {
 			comandos = CommandLine.populateCommand(comandos, argumentos); //Metodo populateCommand, da biblioteca picocli, ira popular o comando instanciado com as opcoes e suas variaveis passadas
 			
 			String[] dadosECaminhosXML = comandos.getDadosECaminhosXML();
-			ComissaoBolsasController.defineCaminhoSaida(comandos.getCaminhoSaida());
-			if(comandos.getCaminhoLog() != null) { ComissaoBolsasController.defineCaminhoLogErro(comandos.getCaminhoLog()); } //Associa o caminho do log de erros apenas se o comando foi utilizado
+			ComissaoBolsasController.getInstancia().defineCaminhoSaida(comandos.getCaminhoSaida());
+			if(comandos.getCaminhoLog() != null) { ComissaoBolsasController.getInstancia().defineCaminhoLogErro(comandos.getCaminhoLog()); } //Associa o caminho do log de erros apenas se o comando foi utilizado
 			boolean verboso = comandos.isVerboso();
 			
 			//Percorre o vetor de dadosECaminhosXML passo 2, pois este vetor esta estruturado como: [caminho XML1, dado1, caminho XML2, dado2, ...]
 			for(int i = 0; i < dadosECaminhosXML.length; i += 2) {
-				ComissaoBolsasController.novoCandidato(dadosECaminhosXML[i], dadosECaminhosXML[i+1]);
+				ComissaoBolsasController.getInstancia().novoCandidato(dadosECaminhosXML[i], dadosECaminhosXML[i+1]);
 			}
 			
 			//Gera a saida do sistema de acordo com os parametros passados
 			if (comandos.isCompleto()) {
-				ComissaoBolsasController.geraSaidaSaidaCompleta(verboso);
+				ComissaoBolsasController.getInstancia().geraSaidaSaidaCompleta(verboso);
 			} else {
 				if (comandos.isPremios()) {
-					ComissaoBolsasController.geraSaidaPremios(verboso);
+					ComissaoBolsasController.getInstancia().geraSaidaPremios(verboso);
 				}
 				if (comandos.isArtigosNoQualisRestrito()) {
-					ComissaoBolsasController.geraSaidaArtigosQualisRestrito(verboso);
+					ComissaoBolsasController.getInstancia().geraSaidaArtigosQualisRestrito(verboso);
 				}
 				if (comandos.isArtigosForaQualisRestrito()) {
-					ComissaoBolsasController.geraSaidaArtigosQualisCompleto(verboso);
+					ComissaoBolsasController.getInstancia().geraSaidaArtigosQualisCompleto(verboso);
 				}
 				if (comandos.isEventosClassificados()) {
-					ComissaoBolsasController.geraSaidaEventos(verboso);
+					ComissaoBolsasController.getInstancia().geraSaidaEventos(verboso);
 				}
 				if (comandos.isVinculoUnirio()) {
-					ComissaoBolsasController.geraSaidaVinculos(verboso);
+					ComissaoBolsasController.getInstancia().geraSaidaVinculos(verboso);
 				}
 				//Nesse caso, nenhum argumento relacionado a saida foi passado
 				if (!comandos.isPremios() && !comandos.isArtigosNoQualisRestrito() && !comandos.isArtigosForaQualisRestrito() && !comandos.isEventosClassificados() && !comandos.isVinculoUnirio()) {
-					ComissaoBolsasController.geraSaidaSaidaCompleta(verboso); //Por padrao, ira gerar a saida completa
+					ComissaoBolsasController.getInstancia().geraSaidaSaidaCompleta(verboso); //Por padrao, ira gerar a saida completa
 				}
 			}
 			
 			//Finaliza o programa, associando o ranking final dos candidatos ao arquivo de saida
-			ComissaoBolsasController.finalizaPrograma();
+			ComissaoBolsasController.getInstancia().finalizaPrograma();
 						
 		} catch(Exception e) {
 			System.out.print(e.getMessage());
@@ -86,8 +86,7 @@ public class Principal {
 	
 	/**
 	 * Ponto de entrada na aplicação.
-	 * @param args
-	 * @throws IOException 
+	 * @param args 
 	 */
 	
 	public static void main(String[] args) {

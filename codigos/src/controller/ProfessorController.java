@@ -10,14 +10,31 @@ import utils.Constantes;
  */
 public class ProfessorController {
 	
-	private static ArquivoCsv professoresPPGI = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_PROFESSORES, ",");
+	private ArquivoCsv professoresPPGI = new ArquivoCsv(Constantes.ENDERECO_ARQUIVO_PROFESSORES, ",");
+	
+	/**
+	 * Implementacao do Singleton.
+	 */
+	
+	private static ProfessorController unicaInstancia;
+	
+	private ProfessorController() {}
+	
+	public static ProfessorController getInstancia() {
+		
+		if (unicaInstancia == null) {
+			unicaInstancia = new ProfessorController();
+		} 
+		
+		return unicaInstancia;
+    }
 	
 	/**
 	 * Retorna se um determinado professor esta no corpo docente da UNIRIO.
 	 * @param professor - String, nome do professor a verificar.
 	 * @return true se for docente, false se nao.
 	 */
-	public static boolean ehProfessorUnirio(String professor)
+	public boolean ehProfessorUnirio(String professor)
 	{
 		String[] professores = professoresPPGI.getElementosColuna("Nome professor");
 		int quantidadeProfessores = professores.length;

@@ -23,7 +23,7 @@ public class Conferencia {
 	 *  Nulo se nao for encontrado.
 	 */
 	private void setQualis() {
-		String qualisSt = ConferenciaController.getClassificacaoCapesPorNome(nome);
+		String qualisSt = ConferenciaController.getInstancia().getClassificacaoCapesPorNome(nome);
 		if (qualisSt.equals("")) {
 			qualis = null;
 		} else {
