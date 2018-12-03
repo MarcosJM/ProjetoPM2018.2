@@ -45,9 +45,6 @@ public class TxtUtils {
 		    out.println(conteudo);
 		    out.close();
 		} catch (IOException e) {
-			logErros.appendDataTxt("../errorLog.txt", e.getMessage());
-			logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
-
 		    //exception handling left as an exercise for the reader
 		}
 		finally {
