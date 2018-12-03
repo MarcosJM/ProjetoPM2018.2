@@ -15,7 +15,7 @@ import java.io.Writer;
  * por padrao escreve em UTF-8.
  */
 public class TxtUtils {
-	private TxtUtils logErros = new TxtUtils();
+
 	
 	/**
 	 * Escreve conteudo no arquivo TXT informado.
@@ -57,17 +57,12 @@ public class TxtUtils {
 		        if(bw != null)
 		            bw.close();
 		    } catch (IOException e) {
-				logErros.appendDataTxt("../errorLog.txt", e.getMessage());
-				logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
-
 		        //exception handling left as an exercise for the reader
 		    }
 		    try {
 		        if(fw != null)
 		            fw.close();
 		    } catch (IOException e) {
-				logErros.appendDataTxt("../errorLog.txt", e.getMessage());
-				logErros.appendDataTxt("../errorLog.txt", "-----------------------------------------------------");
 		        //exception handling left as an exercise for the reader
 		    }
 		}
