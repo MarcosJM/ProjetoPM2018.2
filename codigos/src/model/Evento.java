@@ -2,6 +2,8 @@ package model;
 
 import controller.ConferenciaController;
 
+
+
 /**
  * O Candidato pode ter participado em uma serie de Eventos, que
  * na pratica sao como Conferencia.
@@ -25,7 +27,7 @@ public class Evento {
 	 *  Nulo se nao for encontrado.
 	 */
 	private void setQualis() {
-		String qualisSt = ConferenciaController.getClassificacaoCapesPorNome(nome);
+		String qualisSt = ConferenciaController.getInstancia().getClassificacaoCapesPorNome(nome);
 		if (qualisSt.equals("")) {
 			qualis = null;
 		} else {

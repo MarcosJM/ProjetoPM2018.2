@@ -17,29 +17,191 @@ import utils.TxtUtils;
  */
 public class ComissaoBolsasController {
 	
-	private static ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+	private ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
 	
-	private static String arquivoSaida;
-	private static String arquivoLog;
+	private String arquivoSaida;
+	private String arquivoLog;
 	
-	private static StringBuilder conteudoSaida = new StringBuilder("");
-	private static StringBuilder conteudoLog = new StringBuilder("");
+	private StringBuilder conteudoSaida = new StringBuilder("");
+	private StringBuilder conteudoLog = new StringBuilder("");
 	
+	
+	/**
+	 * Implementacao do Singleton.
+	 */
+	
+	private static ComissaoBolsasController unicaInstancia;
+	
+	private ComissaoBolsasController() {}
+	
+	public static ComissaoBolsasController getInstancia() {
+		
+		if (unicaInstancia == null) {
+			unicaInstancia = new ComissaoBolsasController();
+		} 
+		
+		return unicaInstancia;
+    }
+	
+	public ArrayList<Candidato> getCandidatos() {
+		return candidatos;
+	}
+
+
+	public void setCandidatos(ArrayList<Candidato> candidatos) {
+		this.candidatos = candidatos;
+	}
+	
+	public void addCandidatos(Candidato candidato) {
+		this.candidatos.add(candidato);
+	}
+
+
+	public String getArquivoSaida() {
+		return arquivoSaida;
+	}
+
+
+	public void setArquivoSaida(String arquivoSaida) {
+		this.arquivoSaida = arquivoSaida;
+	}
+
+
+	public String getArquivoLog() {
+		return arquivoLog;
+	}
+
+
+	public void setArquivoLog(String arquivoLog) {
+		this.arquivoLog = arquivoLog;
+	}
+
+
+	public StringBuilder getConteudoSaida() {
+		return conteudoSaida;
+	}
+
+
+	public void setConteudoSaida(StringBuilder conteudoSaida) {
+		this.conteudoSaida = conteudoSaida;
+	}
+
+
+	public StringBuilder getConteudoLog() {
+		return conteudoLog;
+	}
+
+
+	public void setConteudoLog(StringBuilder conteudoLog) {
+		this.conteudoLog = conteudoLog;
+	}
+
+
 	/**
 	 * Cria um novo candidato para ser pontuado.
 	 * Comando: -a <nome-caminho-arquivo-xml> <num-semestres-sem-reprovacao>
 	 * @param caminhoXml - String que indica o caminho ate o arquivo, deve conter a extensao .xml
 	 * @param numeroSemestreSemReprovacao - String, numero de semestres sem reprovar na pos-graduacao.
 	 */
-	public static void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
+	public void novoCandidato(String caminhoXml, String numeroSemestreSemReprovacao) {
 		
 		if (numeroSemestreSemReprovacao.equals("") || numeroSemestreSemReprovacao == null) {
 			numeroSemestreSemReprovacao = String.valueOf(Constantes.NUMERO_SEMESTRES_SEM_REPROVACAO_PADRAO);
 		}
-		Candidato candidato = new Candidato(caminhoXml, Integer.parseInt(numeroSemestreSemReprovacao));
+		
+		Candidato candidato = new Candidato(Integer.parseInt(numeroSemestreSemReprovacao));
+		CandidatoXMLController.getInstancia().carregarCandidatoCompleto(candidato, caminhoXml);
 		
 		// Candidato com o lattes e outros parametros lidos:
 		candidatos.add(candidato);
+		// Define pontuacao deste candidato
+		definePontuacao(candidato);
+	}
+	
+	/**
+	 * RN2 - O candidato recebe um ponto por cada premio recebido nos ultimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoPremios(ArrayList<Premio> premios) {
+		return premios.size() * Constantes.PONTOS_PREMIOS_MULTIPLICADOR;
+	}
+	
+	
+	/**
+	 * RN3 - O candidato recebe tres pontos por cada artigo pontuado como A1, A2 ou B1 
+	 * na Qualis da Computacao nos ultimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoQualisRestrito(ArrayList<Artigo> artigosCompletosQualisRestrito) {
+		return artigosCompletosQualisRestrito.size() * Constantes.PONTOS_QUALIS_RESTRITO_MULTIPLICADOR;
+	
+	}
+	
+	
+	/**
+	 * RN4 - O candidato recebe um ponto por cada artigo pontuado como B2, B3, B4 ou B5 
+	 * na Qualis da Computacao nos ultimos 10 anos.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoQualisCompleto(ArrayList<Artigo> artigosCompletosQualisCompleto) {
+		return artigosCompletosQualisCompleto.size() * Constantes.PONTOS_QUALIS_COMPLETO_MULTIPLICADOR;
+	}
+	
+	
+	/**
+	 * RN5 - O candidato recebe um ponto por cada evento participado. 
+	 * O maximo de pontos por esse requisito sao cinco.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoEventos(ArrayList<Evento> eventos) {
+		if (eventos.size() > Constantes.PONTOS_EVENTOS) {
+			return Constantes.PONTOS_EVENTOS;
+		} else {
+			return eventos.size();
+		}
+	}
+	
+	
+	/**
+	 * RN6 - O candidato recebe um ponto se houver registro de vinculo com a UNIRIO 
+	 * nos ultimos 10 anos, seja por participacao em projetos, 
+	 * bolsas de pesquisa, representacao discente ou similar.
+	 * @return int, quantidade de pontos dessa categoria.
+	 */
+	public int getPontuacaoVinculos(boolean possuiVinculoInstituicao) {
+		if (possuiVinculoInstituicao) {
+			return Constantes.PONTOS_VINCULOS;
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * Metodo para calculo da pontuacao geral.
+	 * Usa metodos que calculam a pontuacao por categoria.
+	 */
+	private void definePontuacao(Candidato candidato) {
+		
+		int pontuacao = 0;
+		
+		// RN1 - O candidato recebe um ponto por cada semestre cursado sem reprovacao no curso que a bolsa esta sendo pleiteada
+		pontuacao += candidato.getNumeroSemestreSemReprovacao();
+		
+		// Premios:
+		pontuacao += getPontuacaoPremios(candidato.getPremios());
+		
+		// Artigos:
+		pontuacao += getPontuacaoQualisRestrito(candidato.getArtigosCompletosQualisRestrito());
+		pontuacao += getPontuacaoQualisCompleto(candidato.getArtigosCompletosQualisCompleto());
+				
+		// Eventos:
+		pontuacao += getPontuacaoEventos(candidato.getEventos());
+		
+		// Vinculos:
+		pontuacao += getPontuacaoVinculos(candidato.isPossuiVinculoInstituicao());
+		
+		candidato.setPontuacao(pontuacao);
+
 	}
 	
 	
@@ -48,12 +210,12 @@ public class ComissaoBolsasController {
 	 * Comando: -pr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public static void geraSaidaPremios(boolean verboso) {
+	public void geraSaidaPremios(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Quantidade de premios\t\tPontuacao de premios\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
 			conteudo.append(candidato.getPremios().size() + "\t\t\t\t");
-			conteudo.append(candidato.getPontuacaoPremios() + "\t\t\t\t");
+			conteudo.append(getPontuacaoPremios(candidato.getPremios()) + "\t\t\t\t");
 			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getPremios().size() > 0) {
@@ -81,12 +243,12 @@ public class ComissaoBolsasController {
 	 * Comando: -ar
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public static void geraSaidaArtigosQualisRestrito(boolean verboso) {
+	public void geraSaidaArtigosQualisRestrito(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Quantidade de artigos\t\tPontuacao de artigos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
 			conteudo.append(candidato.getArtigosCompletosQualisRestrito().size() + "\t\t\t\t");
-			conteudo.append(candidato.getPontuacaoQualisRestrito() + "\t\t\t\t");
+			conteudo.append(getPontuacaoQualisRestrito(candidato.getArtigosCompletosQualisRestrito()) + "\t\t\t\t");
 			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getArtigosCompletosQualisRestrito().size() > 0) {
@@ -113,12 +275,12 @@ public class ComissaoBolsasController {
 	 * Comando: -anr
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public static void geraSaidaArtigosQualisCompleto(boolean verboso) {
+	public void geraSaidaArtigosQualisCompleto(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Quantidade de artigos\t\tPontuacao de artigos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
 			conteudo.append(candidato.getArtigosCompletosQualisCompleto().size() + "\t\t\t\t");
-			conteudo.append(candidato.getPontuacaoQualisCompleto() + "\t\t\t\t");
+			conteudo.append(getPontuacaoQualisCompleto(candidato.getArtigosCompletosQualisCompleto()) + "\t\t\t\t");
 			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getArtigosCompletosQualisCompleto().size() > 0) {
@@ -145,12 +307,12 @@ public class ComissaoBolsasController {
 	 * Comando: -pe
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	 */
-	public static void geraSaidaEventos(boolean verboso) {
+	public void geraSaidaEventos(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Quantidade de eventos\t\tPontuacao de eventos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
 			conteudo.append(candidato.getEventos().size() + "\t\t\t\t");
-			conteudo.append(candidato.getPontuacaoEventos() + "\t\t\t\t");
+			conteudo.append(getPontuacaoEventos(candidato.getEventos()) + "\t\t\t\t");
 			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getEventos().size() > 0) {
@@ -177,12 +339,12 @@ public class ComissaoBolsasController {
 	 * Comando: -vi
 	 * @param verboso - boolean que indica se a saida deve ser completa ou nao. Comando: -v
 	*/ 
-	public static void geraSaidaVinculos(boolean verboso) {
+	public void geraSaidaVinculos(boolean verboso) {
 		StringBuilder conteudo = new StringBuilder("Quantidade de vinculos\t\tPontuacao de vinculos\t\tNome\r\n");
 		
 		for (Candidato candidato : candidatos) {
 			conteudo.append(candidato.getVinculos().size() + "\t\t\t\t");
-			conteudo.append(candidato.getPontuacaoVinculos() + "\t\t\t\t");
+			conteudo.append(getPontuacaoVinculos(candidato.isPossuiVinculoInstituicao()) + "\t\t\t\t");
 			conteudo.append(candidato.getNome());
 			
 			if (verboso && candidato.getVinculos().size() > 0) {
@@ -211,7 +373,7 @@ public class ComissaoBolsasController {
 	 * @return String, candidatos, seus premios, artigos, eventos, vinculos 
 	 * e os pontos em cada categoria.
 	*/ 
-	public static void geraSaidaSaidaCompleta(boolean verboso) {
+	public void geraSaidaSaidaCompleta(boolean verboso) {
 		
 		geraSaidaPremios(verboso);
 		geraSaidaArtigosQualisRestrito(verboso);
@@ -227,7 +389,7 @@ public class ComissaoBolsasController {
 	 * Comando: -o <nome-caminho-arquivo-txt-saida>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public static void defineCaminhoSaida(String caminhoTxt) {
+	public void defineCaminhoSaida(String caminhoTxt) {
 		arquivoSaida = caminhoTxt;
 	}
 	
@@ -237,7 +399,7 @@ public class ComissaoBolsasController {
 	 * Comando: -l <nome-caminho-arquivo-log-errors>
 	 * @param caminhoTxt - String que indica o caminho ate o arquivo, deve conter a extensao .txt
 	 */
-	public static void defineCaminhoLogErro(String caminhoTxt) {
+	public void defineCaminhoLogErro(String caminhoTxt) {
 		arquivoLog = caminhoTxt;
 	}
 	
@@ -246,7 +408,7 @@ public class ComissaoBolsasController {
 	 * Ordena os candidatos disponiveis por sua pontuacao,
 	 * do maior para o menor (decrescente).
 	 */
-	public static void ordenaCandidatos() {
+	public void ordenaCandidatos() {
 		
 		Collections.sort(
 			candidatos, 
@@ -260,7 +422,7 @@ public class ComissaoBolsasController {
 	 * Gera a saida com todos os candidatos lidos e sua pontuacao.
 	 * @return String, candidatos e sua pontuacao completa.
 	 */
-	public static void geraSaidaRanking() {
+	public void geraSaidaRanking() {
 		StringBuilder conteudo = new StringBuilder("Pontos\t\tNome\r\n");
 		ordenaCandidatos();
 		
@@ -277,7 +439,7 @@ public class ComissaoBolsasController {
 	/**
 	 * Finaliza o programa escrevendo nos arquivos de saida e log de erros.  
 	 */
-	public static void finalizaPrograma() {
+	public void finalizaPrograma() {
 		// Escreve o ranking final dos candidatos:
 		conteudoSaida.append("\r\nRanking final\r\n");
 		geraSaidaRanking();

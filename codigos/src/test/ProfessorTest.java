@@ -16,7 +16,7 @@ public class ProfessorTest {
 	 * Testa se a professora Vania esta no excel de professores da UNIRIO.
 	 */
 	void testEhProfessorUnirioTrue() {
-		assertEquals(true, ProfessorController.ehProfessorUnirio("V�nia Maria F�lix Dias"));
+		assertEquals(true, ProfessorController.getInstancia().ehProfessorUnirio("V�nia Maria F�lix Dias"));
 	}
 	
 	@Test
@@ -24,7 +24,7 @@ public class ProfessorTest {
 	 * Testa se a professora 'batata' esta no excel de professores da UNIRIO.
 	 */
 	void testEhProfessorUnirioFalse() {
-		assertEquals(false, ProfessorController.ehProfessorUnirio("batata"));
+		assertEquals(false, ProfessorController.getInstancia().ehProfessorUnirio("batata"));
 	}
 
 }

@@ -35,13 +35,13 @@ public class Periodico {
 			if (issn.length() == 8) {
 				// ISSN tem o formato XXXX-XXXX e por isso eh dividido em duas substrings de tamanho 4:
 				issn = issn.substring(0, 4) + "-" + issn.substring(4, issn.length());
-				qualisSt = PeriodicosController.getClassificacaoCapesPorISSN(issn);
+				qualisSt = PeriodicosController.getInstancia().getClassificacaoCapesPorISSN(issn);
 			} else {
-				qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);	
+				qualisSt = PeriodicosController.getInstancia().getClassificacaoCapesPorTitulo(nome);	
 			}
 			
 		} else {
-			qualisSt = PeriodicosController.getClassificacaoCapesPorTitulo(nome);	
+			qualisSt = PeriodicosController.getInstancia().getClassificacaoCapesPorTitulo(nome);	
 		}
 		
 		
