@@ -48,19 +48,32 @@ Não há interface gráfica. A interação com o usuário se dá inteiramente pe
 
 -   -pe : gera a saída referente à participação em eventos classificados (ou seja, referentes a conferências classificadas como A1, A2, B1, B2, B3, B4 e B5). Para cada candidato, é exibida a quantidade de participações consideradas e a pontuação obtida.
 
+## Como utilizar
 
-## Exemplos
+Dentro da pasta do programa, você encontrará um arquivo .jar. Para executar o programa, faça o seguinte:
+
+- Baixe o projeto para o seu computador;
+- Abra um prompt de comando (como cmd ou powershell no Windows);
+- Navege até a pasta do projeto, pelo caminho que ela se encontra no seu computador;
+
+Dentro da pasta do projeto, só digitar (trocando <parâmetros> pelos comandos que deseja):
 
 ~~~~
-java Principal -o C:\saida.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0
+java -jar projetopm.jar <parâmetros>
+~~~~
 
-java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l C:\saida_log.txt
+## Exemplos 
 
-java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\1920411639358905.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l C:\saida_log.txt -c
+~~~~
+java -jar projetopm.jar -o saida.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\arquivos\lattes\luiz_paulo_0239993115999249.xml 0
 
-java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\0985291000032685.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\5998143228852295.xml 0 -v -l C:\saida_log.txt -pr 
+java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt
 
-java Principal -o C:\saida_completa.txt -a C:\ProjetoPM2018.2\arquivos\lattes\0985291000032685.xml 1 -a C:\ProjetoPM2018.2\arquivos\lattes\6938694286834426.xml 2 -a C:\ProjetoPM2018.2\arquivos\lattes\5998143228852295.xml 0 -v -pr -pe 
+java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\1920411639358905.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\luiz_paulo_0239993115999249.xml 0 -v -l saida_log.txt -c
+
+java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\0985291000032685.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\5998143228852295.xml 0 -v -l saida_log.txt -pr 
+
+java -jar projetopm.jar -o saida_completa.txt -a exemplos\lattes\0985291000032685.xml 1 -a exemplos\lattes\6938694286834426.xml 2 -a exemplos\lattes\5998143228852295.xml 0 -v -pr -pe 
 ~~~~
 
 
