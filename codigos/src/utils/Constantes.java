@@ -32,4 +32,9 @@ public class Constantes {
 	public static final InputStream ENDERECO_ARQUIVO_CONFERENCIA = Constantes.class.getResourceAsStream("/resources/qualis_conferencia.csv");
 	public static final InputStream ENDERECO_ARQUIVO_PERIODICOS = Constantes.class.getResourceAsStream("/resources/qualis_periodicos.csv");
 	public static final InputStream ENDERECO_ARQUIVO_PROFESSORES = Constantes.class.getResourceAsStream("/resources/professores_bsi_ppgi.csv");
+	
+	// erros comuns
+	public static final String ERRO_ENDERECO_COLUNA_INALCANCAVEL = "O endereco da coluna esta fora dos limites.";
+	public static final String ERRO_ENDERECO_LINHA_INALCANCAVEL = "O endereco da linha esta fora dos limites.";
+
 }
